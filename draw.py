@@ -1,8 +1,8 @@
 import pygame
 
-SCREEN = WIDTH, HEIGHT = 1000, 1000
-CELLSIZE = 100
-PADDING = 50
+SCREEN = WIDTH, HEIGHT = 500, 500
+CELLSIZE = 50
+PADDING = 80
 ROWS = COLS = 8 # (WIDTH - 4 * PADDING) // CELLSIZE
 print(ROWS, COLS)
 
@@ -17,7 +17,7 @@ while running:
 
     for r in range(ROWS):
         for c in range(COLS):
-            pygame.draw.circle(win, (255, 255, 255), (c * CELLSIZE + 3 * PADDING, r * CELLSIZE + 3 * PADDING), 10)
+            pygame.draw.circle(win, (255, 255, 255), (c * CELLSIZE + PADDING, r * CELLSIZE + PADDING), 10)
     pygame.display.update()
 
 pygame.quit()
