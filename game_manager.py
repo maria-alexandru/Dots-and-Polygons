@@ -24,7 +24,7 @@ while running:
     draw.draw_grid()
     pygame.display.update()
 
-    # check if a circle was selected
+    # check if a dot was selected
     for cell in cells:
         if pos and draw.collide_circle(cell.r, cell.c, pos):
             print(cell.rect)

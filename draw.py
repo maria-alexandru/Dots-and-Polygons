@@ -18,15 +18,15 @@ def draw_grid():
         for c in range(COLS):
             pygame.draw.circle(win, DOT_COLOR, ((c + 1) * CELL_SIZE + PADDING, (r + 1) * CELL_SIZE + PADDING), DOT_RADIUS)
 
-# draw line between circles
+# draw line between dots
 def draw_line(start, end, color):
     pygame.draw.line(win, color, start, end, LINE_WIDTH)
 
-# draw colored circle when it is selected
+# draw colored dots when it is selected
 def draw_circle(r, c, color):
     pygame.draw.circle(win, color, ((c + 1) * CELL_SIZE + PADDING, (r + 1) * CELL_SIZE + PADDING), DOT_RADIUS + 4)
 
-# check if mouse click is inside the circle
+# check if mouse click is inside the dot
 def collide_circle(r, c, pos):
     circle_center = ((c + 1) * CELL_SIZE + PADDING, (r + 1) * CELL_SIZE + PADDING)
     circle_radius = DOT_RADIUS + 5
