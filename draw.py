@@ -1,9 +1,17 @@
 import pygame
 
+pygame.init()
+info = pygame.display.Info()
+
+# get the screen resolution (width and height)
+screen_width = info.current_w
+screen_height = info.current_h
+
 CELL_SIZE = 100
-GRID_SIZE = 7
-SCREEN = WIDTH, HEIGHT = 900, 900
-PADDING = (WIDTH - (GRID_SIZE + 1) * CELL_SIZE) / 2
+GRID_SIZE = 8
+SCREEN = WIDTH, HEIGHT = screen_width // 3, screen_height // 2
+PADDING_WIDTH = (WIDTH - (GRID_SIZE + 1) * CELL_SIZE) / 2
+PADDING_HEIGHT = (HEIGHT - (GRID_SIZE + 1) * CELL_SIZE) / 2
 ROWS = COLS = GRID_SIZE
 LINE_WIDTH = 7
 DOT_RADIUS = 12
@@ -16,7 +24,7 @@ def draw_background():
 def draw_grid():
     for r in range(ROWS):
         for c in range(COLS):
-            pygame.draw.circle(win, DOT_COLOR, ((c + 1) * CELL_SIZE + PADDING, (r + 1) * CELL_SIZE + PADDING), DOT_RADIUS)
+            pygame.draw.circle(win, DOT_COLOR, ((c + 1) * CELL_SIZE + PADDING_WIDTH, (r + 1) * CELL_SIZE + PADDING_HEIGHT), DOT_RADIUS)
 
 # draw line between dots
 def draw_line(start, end, color):
@@ -24,11 +32,11 @@ def draw_line(start, end, color):
 
 # draw colored dots when it is selected
 def draw_circle(r, c, color):
-    pygame.draw.circle(win, color, ((c + 1) * CELL_SIZE + PADDING, (r + 1) * CELL_SIZE + PADDING), DOT_RADIUS + 4)
+    pygame.draw.circle(win, color, ((c + 1) * CELL_SIZE + PADDING_WIDTH, (r + 1) * CELL_SIZE + PADDING_HEIGHT), DOT_RADIUS + 4)
 
 # check if mouse click is inside the dot
 def collide_circle(r, c, pos):
-    circle_center = ((c + 1) * CELL_SIZE + PADDING, (r + 1) * CELL_SIZE + PADDING)
+    circle_center = ((c + 1) * CELL_SIZE + PADDING_WIDTH, (r + 1) * CELL_SIZE + PADDING_HEIGHT)
     circle_radius = DOT_RADIUS + 5
 
     px, py = pos

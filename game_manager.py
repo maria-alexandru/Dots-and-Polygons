@@ -10,7 +10,6 @@ for c in range(draw.COLS):
         cells.append(cell)
 
 
-pygame.init()
 draw.draw_background()
 running = True
 pos = ()
