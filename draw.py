@@ -28,6 +28,7 @@ padding_height = (screen_height - (grid_size + 1) * cell_size) / 2
 
 lines = []
 selected_points = []
+connected_points = []
 
 def get_size():
     global screen_width, screen_height, info, padding_height, padding_width, cell_size
@@ -66,24 +67,34 @@ def draw_line(start, end, color, cells):
     if line not in lines:
         pygame.draw.line(win, color, start, end, LINE_WIDTH)
         lines.append(line)
+
+        if start not in connected_points:
+            connected_points.append(start)
+        if end not in connected_points:
+            connected_points.append(end)
+
         
         for cell in cells:
-                #horizontal
-                if start[1] == end[1]:
-                    if start[0] < end[0]:
-                        cell.sides[0] = True
-                    else:
-                        cell.sides[2] = True
-                elif start[0] == end[0]: #vertical
-                    if start[1] < end[1]:
-                        cell.sides[3] = True
-                    else:
-                        cell.sides[1] = True
-                else:
-                    if start[0] < end[0]:
-                        cell.sides[4] = True
-                    else:
-                        cell.sides[5] = True
+            for edge_index, edge in enumerate(cell.edges):
+                if line == edge:
+                    cell.sides[edge_index] = True
+            # if line in cell.edges:
+            #     #horizontal
+            #     if start[1] == end[1]:
+            #         if start[0] < end[0]:
+            #             cell.sides[0] = True
+            #         else:
+            #             cell.sides[2] = True
+            #     elif start[0] == end[0]: #vertical
+            #         if start[1] < end[1]:
+            #             cell.sides[3] = True
+            #         else:
+            #             cell.sides[1] = True
+            #     else:
+            #         if start[0] < end[0]:
+            #             cell.sides[4] = True
+            #         elif start[0] > end[0]:
+            #             cell.sides[5] = True
 
         return True
     return False

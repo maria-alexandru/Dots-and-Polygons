@@ -15,8 +15,15 @@ class Cell:
         self.rect = pygame.Rect((c + 1) * cell_size + padding_width, (r + 1) * cell_size + padding_height, cell_size, cell_size)
 
         # available edges
+        top_edge = ((self.rect.left, self.rect.top), (self.rect.right, self.rect.top))  # Horizontal edge at the top
+        bottom_edge = ((self.rect.left, self.rect.bottom), (self.rect.right, self.rect.bottom))  # Horizontal edge at the bottom
+        left_edge = ((self.rect.left, self.rect.top), (self.rect.left, self.rect.bottom))  # Vertical edge on the left
+        right_edge = ((self.rect.right, self.rect.top), (self.rect.right, self.rect.bottom))  # Vertical edge on the right
+
+
+        # available edges
         self.edges = [
-            [self.rect.topleft, self.rect.topright, self.rect.bottomleft, self.rect.bottomright]
+            top_edge, bottom_edge, left_edge, right_edge
         ]
 
         # true if a line has been drawn for the corresponding edge

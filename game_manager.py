@@ -3,7 +3,7 @@ import cell_class
 import pygame
 import detect_surface
 
-selected_mode = "Square"
+selected_mode = "Mix"
 
 # add cells
 cells = []
@@ -29,7 +29,17 @@ while running:
             draw.draw_grid()
 
     detect_surface.detect_and_color_surface(cells, selected_mode)
-    pygame.display.update()
+    
+    for line in draw.lines:
+        pygame.draw.line(draw.win, (130, 208, 209), line[0], line[1], draw.LINE_WIDTH)
+
+    for r in range(draw.rows):
+        for c in range(draw.cols):
+            point = ((c + 1) * draw.cell_size + draw.padding_width, (r + 1) * draw.cell_size + draw.padding_height)
+            if point in draw.connected_points:
+                pygame.draw.circle(draw.win, (130, 109, 168), point, draw.DOT_RADIUS + 4)
+            else:
+                pygame.draw.circle(draw.win, draw.DOT_COLOR, point, draw.DOT_RADIUS)
 
     # check if a dot was selected
     for cell in cells:
@@ -37,5 +47,6 @@ while running:
             print(cell.rect)
             draw.draw_circle(cell.r, cell.c, (130, 109, 168))
 
+    pygame.display.update()
 
 pygame.quit()
