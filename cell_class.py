@@ -13,7 +13,7 @@ class Cell:
         self.index = r * draw.ROWS + c
 
         # rectangle of current cell
-        self.rect = pygame.Rect((c + 1) * draw.CELL_SIZE + draw.PADDING_WIDTH, (r + 1) * draw.CELL_SIZE + draw.PADDING_HEIGHT, draw.CELL_SIZE, draw.CELL_SIZE)
+        self.rect = pygame.Rect((c + 1) * draw.CELL_SIZE + draw.padding_width, (r + 1) * draw.CELL_SIZE + draw.padding_height, draw.CELL_SIZE, draw.CELL_SIZE)
         self.left = self.rect.left
         self.right = self.rect.right
         self.top = self.rect.top
