@@ -4,8 +4,8 @@ import pygame
 
 # add cells
 cells = []
-for c in range(draw.COLS):
-    for r in range(draw.ROWS):
+for c in range(draw.cols):
+    for r in range(draw.rows):
         cell = cell_class.Cell(r, c)
         cells.append(cell)
 

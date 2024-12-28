@@ -10,10 +10,10 @@ class Cell:
         self.c = c
 
         # index of cell
-        self.index = r * draw.ROWS + c
+        self.index = r * draw.rows + c
 
         # rectangle of current cell
-        self.rect = pygame.Rect((c + 1) * draw.CELL_SIZE + draw.padding_width, (r + 1) * draw.CELL_SIZE + draw.padding_height, draw.CELL_SIZE, draw.CELL_SIZE)
+        self.rect = pygame.Rect((c + 1) * draw.cell_size + draw.padding_width, (r + 1) * draw.cell_size + draw.padding_height, draw.cell_size, draw.cell_size)
         self.left = self.rect.left
         self.right = self.rect.right
         self.top = self.rect.top
