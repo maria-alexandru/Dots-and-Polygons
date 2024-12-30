@@ -1,6 +1,7 @@
 import pygame
 import sys
 from button import Button
+import game_manager
 
 pygame.init()
 
@@ -142,7 +143,9 @@ def main_menu():
                     print("Starting Game with Settings:")
                     print(f"Polygon: {polygon_options[polygon_index]}, Grid: {grid_size}, Opponent: {opponent}")
                     print(f"Music Volume: {music_volume}%")
-                    return
+                    gameManager = game_manager.GameManager()
+                    gameManager.run()
+                    # return
                 if buttons[5].checkForInput(MENU_MOUSE_POS):  # Quit button
                     pygame.quit()
                     sys.exit()
