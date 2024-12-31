@@ -24,7 +24,7 @@ class Cell:
 
         # available edges
         self.edges = [
-            top_edge, bottom_edge, left_edge, right_edge, diag1_edge, diag2_edge
+            top_edge, right_edge, bottom_edge, left_edge, diag1_edge, diag2_edge
         ]
 
         self.points = [
@@ -59,7 +59,7 @@ class Cell:
 
         # available edges
         self.edges = [
-            top_edge, bottom_edge, left_edge, right_edge, diag1_edge, diag2_edge
+            top_edge, right_edge, bottom_edge, left_edge, diag1_edge, diag2_edge
         ]
 
         self.points = [

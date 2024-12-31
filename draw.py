@@ -80,7 +80,7 @@ def draw_grid(cells):
     #     for c in range(cols):
     #         pygame.draw.circle(win, DOT_COLOR, ((c + 1) * cell_size + padding_width, (r + 1) * cell_size + padding_height), DOT_RADIUS)
     
-    print("////////////////////")
+    # print("////////////////////")
     for index, cell in enumerate(cells):
         pygame.draw.circle(win, DOT_COLOR, cell.rect.topleft, DOT_RADIUS)
         pygame.draw.circle(win, DOT_COLOR, cell.rect.topright, DOT_RADIUS)
@@ -95,9 +95,7 @@ def draw_grid(cells):
         # print("--------------")
 
         detect_and_color_surface(cells, game_manager.GameManager().selected_mode)
-        for side in cell.sides:
-            index = cell.sides.index(side)
-            print(index)
+        for index, side in enumerate(cell.sides):
             if side == True:
                 draw_line(cell.edges[index][0],  cell.edges[index][1], (130, 208, 209), cells)
 
@@ -105,7 +103,7 @@ def draw_grid(cells):
             if dot == True:
                 draw_circle(cell.points[index][0], cell.points[index][1], (130, 109, 168))
 
-    print("////////////////////")
+    # print("////////////////////")
 
     pygame.display.update()
 
@@ -241,10 +239,6 @@ def try_draw_line(cells):
                     for cell in cells:
                         for edge_index, edge in enumerate(cell.edges):
                             edge = tuple(sorted((edge[0], edge[1])))
-                            # print("--------")
-                            # print(line)
-                            # print(edge)
-                            # print("-------")
 
                             x1, y1 = line[0]
                             x2, y2 = line[1]
@@ -255,7 +249,14 @@ def try_draw_line(cells):
                                 and math.sqrt((x4 - x2)**2 + (y4 - y2)**2) <= 2:
                                 cell.sides[edge_index] = True
                                 # print("ff")
-                                print(edge_index) 
+                                
+                                print("--------")
+                                print(line)
+                                print(edge)
+                                print("-------")
+                                print(cell.edges)
+
+                                print(str(edge_index) + " " + str(cells.index(cell))) 
                                 print("adiacent")
                                 draw_line(point1, point2, (130, 208, 209), cells)
                                 selected_points = []
