@@ -9,6 +9,7 @@ class GameManager:
     
     def __init__(self):
         self.selected_mode = "Mix"
+        self.grid_size = 7
         
 
     def __new__(cls):
@@ -18,6 +19,7 @@ class GameManager:
 
 
     def run(self):
+        draw.init(self.grid_size)
         # add cells
         cells = []
         nr = 0

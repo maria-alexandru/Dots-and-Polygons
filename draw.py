@@ -17,19 +17,28 @@ screen_width, screen_height = 1280, 720
 win = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
 pygame.display.set_caption("Dots and Polygons Menu")
 
-grid_size = 7
-
-rows = cols = grid_size - 1
 LINE_WIDTH = 8
 DOT_RADIUS = 8
 DOT_COLOR = (0, 0, 0)
 BACKGROUND_COLOR = (240, 240, 240)
 
-cell_size = min(screen_height / (grid_size + 1), screen_width / (grid_size + 1))
 
-screen = screen_width, screen_height
-padding_width = (screen_width - (grid_size + 1) * cell_size) / 2
-padding_height = (screen_height - (grid_size + 1) * cell_size) / 2
+# grid_size = 7
+# rows = cols = grid_size - 1
+# cell_size = min(screen_height / (grid_size + 1), screen_width / (grid_size + 1))
+# screen = screen_width, screen_height
+# padding_width = (screen_width - (grid_size + 1) * cell_size) / 2
+# padding_height = (screen_height - (grid_size + 1) * cell_size) / 2
+
+
+def init(size):
+    global grid_size, padding_height, padding_width, screen, rows, cols, cell_size
+    grid_size = size
+    rows = cols = grid_size - 1
+    cell_size = min(screen_height / (grid_size + 1), screen_width / (grid_size + 1))
+    screen = screen_width, screen_height
+    padding_width = (screen_width - (grid_size + 1) * cell_size) / 2
+    padding_height = (screen_height - (grid_size + 1) * cell_size) / 2
 
 lines = []
 selected_points = []
