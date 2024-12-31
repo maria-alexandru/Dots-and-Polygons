@@ -55,7 +55,7 @@ def update_points():
     print("*************selected points: " + str(selected_points))
     info = pygame.display.Info()
     updated_points = [(math.floor(x * screen_width / info.current_w), math.floor(y * screen_height / info.current_h)) for x, y in selected_points]
-    print(updated_points)
+    # print(updated_points)
     selected_points = updated_points
 
 
