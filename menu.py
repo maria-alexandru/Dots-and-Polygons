@@ -161,6 +161,8 @@ def main_menu():
                     print(f"Polygon: {polygon_options[polygon_index]}, Grid: {grid_size}, Opponent: {opponent}")
                     print(f"Music Volume: {music_volume}%")
                     gameManager = game_manager.GameManager()
+                    game_manager.GameManager().__setattr__("grid_size", grid_size)
+                    
                     gameManager.run()
                     # return
                 if buttons[5].checkForInput(MENU_MOUSE_POS):  # Quit button
