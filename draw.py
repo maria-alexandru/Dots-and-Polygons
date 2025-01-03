@@ -2,7 +2,6 @@ import ctypes
 import pygame
 import game_manager
 # import detect_surface
-from scipy.spatial import distance
 import math
 
 pygame.init()
