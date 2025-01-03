@@ -55,7 +55,7 @@ def create_buttons(screen_width, screen_height):
     polygon_image = scale_image(resized_image2, scale_factor)
 
     title_button_spacing = int(screen_height * 0.25)
-    button_spacing_horizontal = int(30 * scale_factor)  # Distanta între butoanele Play și Quit
+    button_spacing_horizontal = int(30 * scale_factor)  # Distanta intre butoanele Play și Quit
 
     play_button = Button(
         image=play_image,
