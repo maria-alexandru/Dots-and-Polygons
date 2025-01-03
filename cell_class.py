@@ -27,6 +27,7 @@ class Cell:
             top_edge, right_edge, bottom_edge, left_edge, diag1_edge, diag2_edge
         ]
 
+        # points of the cell
         self.points = [
             self.rect.topleft, self.rect.topright, self.rect.bottomright, self.rect.bottomleft
         ]
@@ -40,11 +41,14 @@ class Cell:
         # Winner who completed the square
         self.winner = None
 
+
     def is_square_complete(self):
         return all(self.sides[:4])
 
+
     def is_triangle_complete(self):
         return (self.sides[0] and self.sides[2] and self.sides[4]) or (self.sides[1] and self.sides[3] and self.sides[5])
+    
     
     def update_dim(self, cell_size, padding_width, padding_height):
         self.rect = pygame.Rect((self.c + 1) * cell_size + padding_width, (self.r + 1) * cell_size + padding_height, cell_size, cell_size)
@@ -62,6 +66,7 @@ class Cell:
             top_edge, right_edge, bottom_edge, left_edge, diag1_edge, diag2_edge
         ]
 
+        # points of the cell
         self.points = [
             self.rect.topleft, self.rect.topright, self.rect.bottomright, self.rect.bottomleft
         ]
