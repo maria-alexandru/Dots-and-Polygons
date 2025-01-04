@@ -128,6 +128,7 @@ def detect_and_color_surface(cells, mode):
                     player1_score += 1
                 else:  # Jucătorul 2
                     player2_score += 1
+
             pygame.draw.rect(win, cell.color, cell.rect)
             draw_line(cell.rect.topleft, cell.rect.topright, (130, 208, 209), cells)
             draw_line(cell.rect.topright, cell.rect.bottomright, (130, 208, 209), cells)
