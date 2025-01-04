@@ -4,6 +4,7 @@ from button import Button
 import game_manager
 
 pygame.init()
+pygame.mixer.init()
 
 # Screen settings
 SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
@@ -20,6 +21,11 @@ polygon_index = 0
 grid_size = 7
 opponent = "Player"
 music_volume = 0
+
+# Load and play background music
+pygame.mixer.music.load("assets/Two Gong Fire - Ryan McCaffrey_Go By Ocean.mp3")
+pygame.mixer.music.set_volume(music_volume / 100)
+pygame.mixer.music.play(-1)
 
 def get_font(size): # Returns Press-Start-2P in the desired size
     return pygame.font.Font("assets/font.ttf", size)
@@ -155,6 +161,7 @@ def main_menu():
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[3].checkForInput(MENU_MOUSE_POS):  # Music button
                     music_volume = (music_volume + 10) % 110  # Increment volume or reset
+                    pygame.mixer.music.set_volume(music_volume / 100)  # Update music volume
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[4].checkForInput(MENU_MOUSE_POS):  # Play button
                     print("Starting Game with Settings:")
