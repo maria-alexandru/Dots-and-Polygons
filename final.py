@@ -8,18 +8,11 @@ pygame.init()
 # Screen settings
 SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
-pygame.display.set_caption("Dots and Polygons Menu")
+pygame.display.set_caption("Dots and Polygons")
 
 # Background and fonts
 BG = pygame.image.load("assets/fundal.jpg")
 BASE_FONT_SIZE = 20
-
-# Default settings
-polygon_options = ["Square", "Triangle", "Mix"]
-polygon_index = 0
-grid_size = 7
-opponent = "Player"
-music_volume = 0
 
 def get_font(size): # Returns Press-Start-2P in the desired size
     return pygame.font.Font("assets/font.ttf", size)
@@ -49,68 +42,31 @@ def create_buttons(screen_width, screen_height):
     resized_image1 = pygame.transform.scale(original_image, (165, 75))
     resized_image2 = pygame.transform.scale(original_image, (360, 75))
 
-    play_image = scale_image(resized_image1, scale_factor)
-    music_image = scale_image(resized_image2, scale_factor)
-    grid_image = scale_image(resized_image2, scale_factor)
-    polygon_image = scale_image(resized_image2, scale_factor)
+    quit_image = scale_image(resized_image1, scale_factor)
+    menu_image = scale_image(resized_image2, scale_factor)
+   
 
     title_button_spacing = int(screen_height * 0.25)
-    button_spacing_horizontal = int(30 * scale_factor)  # Distanta intre butoanele Play și Quit
 
-    play_button = Button(
-        image=play_image,
-        pos=(screen_width // 2 - play_image.get_width() // 2 - button_spacing_horizontal // 2,
-             title_button_spacing),
-        text_input="PLAY",
-        font=font,
-        base_color="White",
-        hovering_color="#eae3ff",
-    )
     quit_button = Button(
-        image=play_image,
-        pos=(screen_width // 2 + play_image.get_width() // 2 + button_spacing_horizontal // 2,
-             title_button_spacing),
+        image=quit_image,
+        pos=(screen_width // 2, title_button_spacing + int(150 * scale_factor)),
         text_input="QUIT",
         font=font,
         base_color="White",
         hovering_color="#eae3ff",
     )
-
-    grid_button = Button(
-        image=grid_image,
-        pos=(screen_width // 2, title_button_spacing + int(90 * scale_factor)),
-        text_input=f"Grid Size: {grid_size}",
-        font=font,
-        base_color="White",
-        hovering_color="#d7fcd4",
-    )
-
-    polygon_button = Button(
-        image=polygon_image,
-        pos=(screen_width // 2, title_button_spacing + int(185 * scale_factor)),
-        text_input=f"Polygon: {polygon_options[polygon_index]}",
-        font=font,
-        base_color="White",
-        hovering_color="#d7fcd4",
-    )
     
-    opponent_button = Button(
-        image=music_image,
+    
+    menu_button = Button(
+        image=menu_image,
         pos=(screen_width // 2, title_button_spacing + int(280 * scale_factor)),
-        text_input=f"Opponent: {opponent}",
+        text_input=f"BACK TO MENU",
         font=font,
         base_color="White",
         hovering_color="#d7fcd4",
     )
-    music_button = Button(
-        image=music_image,
-        pos=(screen_width // 2, title_button_spacing + int(375 * scale_factor)),
-        text_input=f"Music Volume: {music_volume}%",
-        font=font,
-        base_color="White",
-        hovering_color="#d7fcd4",
-    )
-    return [polygon_button, grid_button, opponent_button, music_button, play_button, quit_button]
+    return [quit_button, menu_button]
 
 
 def main_menu():
@@ -124,8 +80,8 @@ def main_menu():
         # Draw title
         draw_text(
             SCREEN,
-            "MAIN MENU",
-            (SCREEN.get_width() // 2, int(75 * (SCREEN.get_height() / 720))),
+            "GAME OVER",
+            (SCREEN.get_width() // 2, int(200 * (SCREEN.get_height() / 720))),
             get_font(int(70 * (SCREEN.get_width() / 1280))),
             "White",
         )
@@ -144,31 +100,13 @@ def main_menu():
                 SCREEN = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                 buttons = create_buttons(event.w, event.h)
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if buttons[0].checkForInput(MENU_MOUSE_POS):  # Polygon button
-                    polygon_index = (polygon_index + 1) % len(polygon_options)  # Next polygon option
-                    buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
-                if buttons[1].checkForInput(MENU_MOUSE_POS):  # Grid button
-                    grid_size = grid_size + 1 if grid_size < 10 else 7  # Increment grid size or reset
-                    buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
-                if buttons[2].checkForInput(MENU_MOUSE_POS):  # Opponent button
-                    opponent = "Computer" if opponent == "Player" else "Player"
-                    buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
-                if buttons[3].checkForInput(MENU_MOUSE_POS):  # Music button
-                    music_volume = (music_volume + 10) % 110  # Increment volume or reset
-                    buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
-                if buttons[4].checkForInput(MENU_MOUSE_POS):  # Play button
-                    print("Starting Game with Settings:")
-                    print(f"Polygon: {polygon_options[polygon_index]}, Grid: {grid_size}, Opponent: {opponent}")
-                    print(f"Music Volume: {music_volume}%")
-                    gameManager = game_manager.GameManager()
-                    game_manager.GameManager().__setattr__("grid_size", grid_size)
-                    game_manager.GameManager().__setattr__("selected_mode", polygon_options[polygon_index])
-                    gameManager.run()
-                    # return
-                if buttons[5].checkForInput(MENU_MOUSE_POS):  # Quit button
+                if buttons[0].checkForInput(MENU_MOUSE_POS):  # Quit button
                     pygame.quit()
                     sys.exit()
-
+                if buttons[1].checkForInput(MENU_MOUSE_POS):  # Back to Menu button
+                    pygame.quit()
+                    sys.exit()
+                            
         pygame.display.update()
 
 
