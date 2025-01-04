@@ -34,6 +34,7 @@ class GameManager:
         draw.display_current_player()
 
         while running:
+            draw.display_current_player()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False

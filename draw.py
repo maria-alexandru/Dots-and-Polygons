@@ -19,6 +19,9 @@ BACKGROUND_COLOR = (240, 240, 240)
 player_colors = [(0, 255, 0), (255, 0, 0)]  # Verde pentru primul jucător, Roșu pentru al doilea jucător
 current_player = 0  # Jucătorul curent (0 sau 1)
 
+player1_score = 0
+player2_score = 0
+
 # initialize variables based on grid size
 def init(size):
     global grid_size, padding_height, padding_width, screen, rows, cols, cell_size
@@ -63,17 +66,22 @@ def update_points():
 def switch_player():
     global current_player
     current_player = (current_player + 1) % len(player_colors)  # Schimbă între 0 și 1
-    display_current_player()
-    #return player_colors[current_player]
 
 # Funcția care afișează jucătorul curent
 def display_current_player():
-    global current_player
-    pygame.draw.rect(win, BACKGROUND_COLOR, (20, 20, 300, 40))
+    global current_player, player1_score, player2_score
+    pygame.draw.rect(win, BACKGROUND_COLOR, (20, 20, 400, 60))
     font = pygame.font.SysFont("Arial", 30)
+
     text = f"Current Player: Player {current_player + 1}"
-    label = font.render(text, 1, player_colors[current_player])
-    win.blit(label, (20, 20))
+    score_text = f"Player 1: {player1_score}  |  Player 2: {player2_score}"
+
+    player_label = font.render(text, 1, player_colors[current_player])
+    score_label = font.render(score_text, 1, (0, 0, 255))
+
+    win.blit(player_label, (20, 20))
+    win.blit(score_label, (20, 50))
+
     pygame.display.update()
 
 
@@ -106,14 +114,17 @@ def draw_grid(cells):
 
 # check if a polygon is completed and draw it
 def detect_and_color_surface(cells, mode):
+    global player1_score, player2_score
     for cell in cells:
         # detect complete square
         if mode in ["Square", "Mix"] and cell.is_square_complete():
             if cell.color == (0, 0, 0):
                 switch_player()
                 cell.color = player_colors[current_player]
-                # switch_player()
-                # print("patrat" + str(current_player))
+                if current_player == 0:  # Jucătorul 1
+                    player1_score += 1
+                else:  # Jucătorul 2
+                    player2_score += 1
             pygame.draw.rect(win, cell.color, cell.rect)
             draw_line(cell.rect.topleft, cell.rect.topright, (130, 208, 209), cells)
             draw_line(cell.rect.topright, cell.rect.bottomright, (130, 208, 209), cells)
@@ -126,7 +137,7 @@ def detect_and_color_surface(cells, mode):
             pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomright, DOT_RADIUS + 4)
             
             cell.winner = "Player"
-            
+
 
         if mode in ["Triangle", "Mix"] and cell.is_triangle_complete():
 
@@ -134,6 +145,11 @@ def detect_and_color_surface(cells, mode):
                 triangle_points = [cell.rect.topleft, cell.rect.topright, cell.rect.bottomleft]
                 if cell.color == (0, 0, 0):
                     cell.color = player_colors[current_player]
+                    if current_player == 0:  # Jucătorul 1
+                        player1_score += 1
+                    else:  # Jucătorul 2
+                        player2_score += 1
+
                 pygame.draw.polygon(win, cell.color, triangle_points)
                 draw_line(cell.rect.topleft, cell.rect.topright, (130, 208, 209), cells)
                 draw_line(cell.rect.topleft, cell.rect.bottomleft, (130, 208, 209), cells)
@@ -147,6 +163,10 @@ def detect_and_color_surface(cells, mode):
                 triangle_points = [cell.rect.topright, cell.rect.bottomright, cell.rect.bottomleft]
                 if cell.color == (0, 0, 0):
                     cell.color = player_colors[current_player]
+                    if current_player == 0:  # Jucătorul 1
+                        player1_score += 1
+                    else:  # Jucătorul 2
+                        player2_score += 1
                 
                 pygame.draw.polygon(win, cell.color, triangle_points)
                 draw_line(cell.rect.topright, cell.rect.bottomright, (130, 208, 209), cells)
