@@ -4,7 +4,6 @@ from button import Button
 import game_manager
 
 pygame.init()
-pygame.mixer.init()
 
 # Screen settings
 SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
@@ -20,7 +19,7 @@ polygon_options = ["Square", "Triangle", "Mix"]
 polygon_index = 0
 grid_size = 7
 opponent = "Player"
-music_volume = 0
+music_volume = 30
 
 # Load and play background music
 pygame.mixer.music.load("assets/Two Gong Fire - Ryan McCaffrey_Go By Ocean.mp3")
@@ -168,8 +167,8 @@ def main_menu():
                     print(f"Polygon: {polygon_options[polygon_index]}, Grid: {grid_size}, Opponent: {opponent}")
                     print(f"Music Volume: {music_volume}%")
                     gameManager = game_manager.GameManager()
-                    game_manager.GameManager().__setattr__("grid_size", grid_size)
-                    game_manager.GameManager().__setattr__("selected_mode", polygon_options[polygon_index])
+                    gameManager.__setattr__("grid_size", grid_size)
+                    gameManager.__setattr__("selected_mode", polygon_options[polygon_index])
                     gameManager.run()
                     # return
                 if buttons[5].checkForInput(MENU_MOUSE_POS):  # Quit button

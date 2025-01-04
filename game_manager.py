@@ -21,10 +21,8 @@ class GameManager:
         draw.init(self.grid_size, self.selected_mode)
         # add cells
         cells = []
-        nr = 0
         for c in range(draw.cols):
             for r in range(draw.rows):
-                nr = nr + 1
                 cell = cell_class.Cell(r, c, draw.cell_size, draw.padding_width, draw.padding_height)
                 cells.append(cell)
 

@@ -4,6 +4,12 @@ class Cell:
     def __init__(self, r, c, cell_size, padding_width, padding_height):
         
         self.color = (0, 0, 0)
+        self.color_tr1 = (0, 0, 0)
+        self.color_tr2 = (0, 0, 0)
+
+        self.color_tr2_points = []
+        self.color_tr1_points = []
+
         # row
         self.r = r
 
@@ -43,13 +49,28 @@ class Cell:
         # Winner who completed the square
         self.winner = None
 
+        self.is_triangle = False
+
+        self.is_square = False
 
     def is_square_complete(self):
         return all(self.sides[:4])
 
 
     def is_triangle_complete(self):
-        return (self.sides[0] and self.sides[2] and self.sides[4]) or (self.sides[1] and self.sides[3] and self.sides[5])
+        if self.sides[0] and self.sides[1] and self.sides[4]:
+            return True
+        
+        if self.sides[2] and self.sides[3] and self.sides[4]:
+            return True
+
+        if self.sides[1] and self.sides[2] and self.sides[5]:
+            return True
+        
+        if self.sides[0] and self.sides[3] and self.sides[5]:
+            return True
+        
+        return False
     
     
     def update_dim(self, cell_size, padding_width, padding_height):
