@@ -2,6 +2,7 @@ import pygame
 
 class Cell:
     def __init__(self, r, c, cell_size, padding_width, padding_height):
+        self.color = (0, 0, 0)
         # row
         self.r = r
 

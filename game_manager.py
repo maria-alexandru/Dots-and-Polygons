@@ -18,7 +18,7 @@ class GameManager:
 
 
     def run(self):
-        draw.init(self.grid_size)
+        draw.init(self.grid_size, self.selected_mode)
         # add cells
         cells = []
         nr = 0
@@ -31,8 +31,10 @@ class GameManager:
         running = True
         pos = ()
         draw.draw_grid(cells)
+        draw.display_current_player()
 
         while running:
+            draw.display_current_player()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -55,9 +57,7 @@ class GameManager:
 
                     # reset position
                     pos = (-1, -1)
-
-                    # check if a polygon was completed and draw it
-                    draw.detect_and_color_surface(cells, self.selected_mode)            
+                       
 
             pygame.display.update()
 
