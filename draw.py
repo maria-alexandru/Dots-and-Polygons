@@ -63,6 +63,7 @@ def update_points():
 def switch_player():
     global current_player
     current_player = (current_player + 1) % len(player_colors)  # Schimbă între 0 și 1
+    display_current_player()
     #return player_colors[current_player]
 
 # Funcția care afișează jucătorul curent
