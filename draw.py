@@ -15,6 +15,10 @@ DOT_RADIUS = 8
 DOT_COLOR = (0, 0, 0)
 BACKGROUND_COLOR = (240, 240, 240)
 
+# Definirea culorilor pentru jucători
+player_colors = [(0, 255, 0), (255, 0, 0)]  # Verde pentru primul jucător, Roșu pentru al doilea jucător
+current_player = 0  # Jucătorul curent (0 sau 1)
+
 # initialize variables based on grid size
 def init(size):
     global grid_size, padding_height, padding_width, screen, rows, cols, cell_size
@@ -55,6 +59,13 @@ def update_points():
     selected_points = updated_points
 
 
+# Schimbă jucătorul după fiecare mutare
+def switch_player():
+    global current_player
+    current_player = (current_player + 1) % len(player_colors)  # Schimbă între 0 și 1
+    #return player_colors[current_player]
+
+
 def draw_background():
     win.fill(BACKGROUND_COLOR)
 
@@ -87,7 +98,11 @@ def detect_and_color_surface(cells, mode):
     for cell in cells:
         # detect complete square
         if mode in ["Square", "Mix"] and cell.is_square_complete():
-            pygame.draw.rect(win, (0, 255, 0), cell.rect)
+            if cell.color == (0, 0, 0):
+                cell.color = player_colors[current_player]
+                switch_player()
+                print("patrat" + str(current_player))
+            pygame.draw.rect(win, cell.color, cell.rect)
             draw_line(cell.rect.topleft, cell.rect.topright, (130, 208, 209), cells)
             draw_line(cell.rect.topright, cell.rect.bottomright, (130, 208, 209), cells)
             draw_line(cell.rect.bottomright, cell.rect.bottomleft, (130, 208, 209), cells)
@@ -99,12 +114,15 @@ def detect_and_color_surface(cells, mode):
             pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomright, DOT_RADIUS + 4)
             
             cell.winner = "Player"
+            
 
         if mode in ["Triangle", "Mix"] and cell.is_triangle_complete():
 
             if cell.sides[0] and cell.sides[3] and cell.sides[4]:
                 triangle_points = [cell.rect.topleft, cell.rect.topright, cell.rect.bottomleft]
-                pygame.draw.polygon(win, (255, 0, 0), triangle_points)
+                if cell.color == (0, 0, 0):
+                    cell.color = player_colors[current_player]
+                pygame.draw.polygon(win, cell.color, triangle_points)
                 draw_line(cell.rect.topleft, cell.rect.topright, (130, 208, 209), cells)
                 draw_line(cell.rect.topleft, cell.rect.bottomleft, (130, 208, 209), cells)
                 draw_line(cell.rect.topright, cell.rect.bottomleft, (130, 208, 209), cells)
@@ -115,7 +133,10 @@ def detect_and_color_surface(cells, mode):
 
             elif cell.sides[2] and cell.sides[1] and cell.sides[5]:
                 triangle_points = [cell.rect.topright, cell.rect.bottomright, cell.rect.bottomleft]
-                pygame.draw.polygon(win, (255, 0, 0), triangle_points)
+                if cell.color == (0, 0, 0):
+                    cell.color = player_colors[current_player]
+                
+                pygame.draw.polygon(win, cell.color, triangle_points)
                 draw_line(cell.rect.topright, cell.rect.bottomright, (130, 208, 209), cells)
                 draw_line(cell.rect.topright, cell.rect.bottomleft, (130, 208, 209), cells)
                 draw_line(cell.rect.bottomleft, cell.rect.bottomright, (130, 208, 209), cells)
@@ -123,9 +144,12 @@ def detect_and_color_surface(cells, mode):
                 pygame.draw.circle(win, (130, 109, 168), cell.rect.topright, DOT_RADIUS + 4)
                 pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomleft, DOT_RADIUS + 4)
                 pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomright, DOT_RADIUS + 4)
+                
 
             else:
                 continue
+            switch_player()
+            print("triunghi" + str(current_player))
 
             cell.winner = "Player"
 
@@ -138,6 +162,8 @@ def is_point_inside_cell(point, cell):
 # draw line between dots
 def draw_line(start, end, color, cells):
     global lines
+    #color = player_colors[current_player]  # Folosește culoarea jucătorului curent
+    
     pygame.draw.line(win, color, start, end, LINE_WIDTH)
     pygame.draw.circle(win, (130, 109, 168), start, DOT_RADIUS + 4)
     pygame.draw.circle(win, (130, 109, 168), end, DOT_RADIUS + 4)
@@ -184,11 +210,14 @@ def try_draw_line(cells):
     global selected_points
     # check for each pair of points from selected_points if they are adjacent
     # and if they are draw a line between them
+    aux = False
+
     if len(selected_points) >= 2:
         for point1 in selected_points:
             for point2 in selected_points:
                 if is_adjacent(point1, point2) and point1 != point2:   
                     line = tuple(sorted((point1, point2)))
+                    
                     
                     for cell in cells:
                         for edge_index, edge in enumerate(cell.edges):
@@ -202,12 +231,23 @@ def try_draw_line(cells):
                             if math.sqrt((x3 - x1)**2 + (y3 - y1)**2) <= 2\
                                 and math.sqrt((x4 - x2)**2 + (y4 - y2)**2) <= 2:
                                 cell.sides[edge_index] = True
-                                draw_line(point1, point2, (130, 208, 209), cells)
+                                draw_line(point1, point2, player_colors[current_player], cells)
                                 selected_points = []
+                                
+                                
+                                if aux == False:
+                                    switch_player()
+                                    print("linie" + str(current_player))
+                                    aux = True
+
+                                    
+                                #switch_player()
+                                
                     
         if len(selected_points) >= 8:
             # reset selection
             selected_points = []
+            #switch_player()
 
 
 # draw colored dots when it is selected

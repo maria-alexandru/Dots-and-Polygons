@@ -57,7 +57,8 @@ class GameManager:
                     pos = (-1, -1)
 
                     # check if a polygon was completed and draw it
-                    draw.detect_and_color_surface(cells, self.selected_mode)            
+                    draw.detect_and_color_surface(cells, self.selected_mode)
+                       
 
             pygame.display.update()
 
