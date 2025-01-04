@@ -23,9 +23,10 @@ player1_score = 0
 player2_score = 0
 
 # initialize variables based on grid size
-def init(size):
-    global grid_size, padding_height, padding_width, screen, rows, cols, cell_size
+def init(size, mode):
+    global grid_size, padding_height, padding_width, screen, rows, cols, cell_size, selected_mode
     grid_size = size
+    selected_mode = mode
     rows = cols = grid_size - 1
     cell_size = min(screen_height / (grid_size + 1), screen_width / (grid_size + 1))
     screen = screen_width, screen_height
@@ -115,11 +116,13 @@ def draw_grid(cells):
 # check if a polygon is completed and draw it
 def detect_and_color_surface(cells, mode):
     global player1_score, player2_score
+    colored = False
+    switch_player()
     for cell in cells:
         # detect complete square
         if mode in ["Square", "Mix"] and cell.is_square_complete():
             if cell.color == (0, 0, 0):
-                switch_player()
+                colored = True
                 cell.color = player_colors[current_player]
                 if current_player == 0:  # Jucătorul 1
                     player1_score += 1
@@ -180,10 +183,12 @@ def detect_and_color_surface(cells, mode):
 
             else:
                 continue
-            switch_player()
-            print("triunghi" + str(current_player))
+            # switch_player()
+            # print("triunghi" + str(current_player))
 
             cell.winner = "Player"
+    if colored == False:
+        switch_player()
 
 
 # verify if there is a dot between lines
@@ -273,14 +278,13 @@ def try_draw_line(cells):
                                     print("linie" + str(current_player))
                                     aux = True
 
-                                    
-                                #switch_player()
+                            
+                    detect_and_color_surface(cells, selected_mode)
                                 
                     
         if len(selected_points) >= 8:
             # reset selection
             selected_points = []
-            #switch_player()
 
 
 # draw colored dots when it is selected
