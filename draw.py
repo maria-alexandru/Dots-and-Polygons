@@ -36,7 +36,7 @@ def get_size(cells):
 
     # get the screen resolution (width and height)
     info = pygame.display.Info()
-    # update_points()
+    update_points()
     screen_width = info.current_w
     screen_height = info.current_h
     cell_size = min(screen_height / (grid_size + 1), screen_width / (grid_size + 1))
@@ -51,7 +51,13 @@ def get_size(cells):
 def update_points():
     global selected_points
     info = pygame.display.Info()
-    updated_points = [(math.floor(x * screen_width / info.current_w), math.floor(y * screen_height / info.current_h)) for x, y in selected_points]
+    new_screen_width = info.current_w
+    new_screen_height = info.current_h
+    new_cell_size = min(new_screen_height / (grid_size + 1), new_screen_width / (grid_size + 1))
+    new_padding_width = (new_screen_width - (grid_size + 1) * new_cell_size) / 2
+    new_padding_height = (new_screen_height - (grid_size + 1) * new_cell_size) / 2
+
+    updated_points = [(math.floor((x - padding_width) // cell_size * new_cell_size + new_padding_width), math.floor((y - padding_height) // cell_size * new_cell_size + new_padding_height)) for (x, y) in selected_points]
     selected_points = updated_points
 
 
@@ -157,7 +163,7 @@ def is_adjacent(p1, p2):
         return True
 
     # diagonal adjacency
-    if abs(abs(x1 - x2) - cell_size) <= cell_size and abs(abs(y1 - y2) - cell_size) <= cell_size:
+    if abs(abs(x1 - x2) - cell_size) <= 1 and abs(abs(y1 - y2) - cell_size) <= 1:
         return True
     return False
 
@@ -176,9 +182,21 @@ def select_point(cell, pos):
     collide, index = collide_circle(cell, pos)
     # if the pos collides with a dot, add the dot's coordinates to the selected_points list
     if collide:
-        if cell.points[index] not in selected_points:
+        if not is_in_selected_points(cell.points[index]):#cell.points[index] not in selected_points:
             selected_points.append(cell.points[index])
 
+def is_in_selected_points(point):
+    for s_point in selected_points:
+        if is_same_point(point, s_point):
+            return True
+    return False
+
+def is_same_point(point1, point2):
+    (x1, y1) = point1
+    (x2, y2) = point2
+    if abs(x2 - x1) <= 1 and abs(y2 - y1) <= 1:
+        return True
+    return False
 
 def try_draw_line(cells):
     global selected_points
@@ -204,7 +222,24 @@ def try_draw_line(cells):
                                 cell.sides[edge_index] = True
                                 draw_line(point1, point2, (130, 208, 209), cells)
                                 selected_points = []
-                    
+
+                elif len(selected_points) >= 1 and point1 != point2:
+                    # if len(selected_points) > 1:
+                    last_point = selected_points[-1]
+                    for s_point in selected_points:
+                        if last_point and s_point != last_point:
+                            for cell in cells:
+                                for index, point in enumerate(cell.points):
+                                    if is_same_point(s_point, point):
+                                        # set the dot to false
+                                        cell.dots[index] = False
+                                        pygame.draw.circle(win, BACKGROUND_COLOR, point, DOT_RADIUS + 5)
+                                        pygame.draw.circle(win, DOT_COLOR, point, DOT_RADIUS)
+                            selected_points.remove(s_point)
+
+                    if last_point:
+                        pygame.draw.circle(win, (130, 109, 168), last_point, DOT_RADIUS + 4)
+
         if len(selected_points) >= 8:
             # reset selection
             selected_points = []
