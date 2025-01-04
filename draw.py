@@ -65,6 +65,16 @@ def switch_player():
     current_player = (current_player + 1) % len(player_colors)  # Schimbă între 0 și 1
     #return player_colors[current_player]
 
+# Funcția care afișează jucătorul curent
+def display_current_player():
+    global current_player
+    pygame.draw.rect(win, BACKGROUND_COLOR, (20, 20, 300, 40))
+    font = pygame.font.SysFont("Arial", 30)
+    text = f"Current Player: Player {current_player + 1}"
+    label = font.render(text, 1, player_colors[current_player])
+    win.blit(label, (20, 20))
+    pygame.display.update()
+
 
 def draw_background():
     win.fill(BACKGROUND_COLOR)
@@ -99,9 +109,10 @@ def detect_and_color_surface(cells, mode):
         # detect complete square
         if mode in ["Square", "Mix"] and cell.is_square_complete():
             if cell.color == (0, 0, 0):
-                cell.color = player_colors[current_player]
                 switch_player()
-                print("patrat" + str(current_player))
+                cell.color = player_colors[current_player]
+                # switch_player()
+                # print("patrat" + str(current_player))
             pygame.draw.rect(win, cell.color, cell.rect)
             draw_line(cell.rect.topleft, cell.rect.topright, (130, 208, 209), cells)
             draw_line(cell.rect.topright, cell.rect.bottomright, (130, 208, 209), cells)
@@ -229,13 +240,14 @@ def try_draw_line(cells):
                             x4, y4 = edge[1]
 
                             if math.sqrt((x3 - x1)**2 + (y3 - y1)**2) <= 2\
-                                and math.sqrt((x4 - x2)**2 + (y4 - y2)**2) <= 2:
+                                and math.sqrt((x4 - x2)**2 + (y4 - y2)**2) <= 2\
+                                and cell.sides[edge_index] == False:
                                 cell.sides[edge_index] = True
-                                draw_line(point1, point2, player_colors[current_player], cells)
                                 selected_points = []
                                 
                                 
                                 if aux == False:
+                                    draw_line(point1, point2, player_colors[current_player], cells)
                                     switch_player()
                                     print("linie" + str(current_player))
                                     aux = True

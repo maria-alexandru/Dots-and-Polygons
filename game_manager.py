@@ -31,6 +31,7 @@ class GameManager:
         running = True
         pos = ()
         draw.draw_grid(cells)
+        draw.display_current_player()
 
         while running:
             for event in pygame.event.get():
@@ -39,6 +40,7 @@ class GameManager:
                 elif event.type == pygame.VIDEORESIZE:
                     draw.draw_grid(cells)
                 elif event.type == pygame.MOUSEBUTTONDOWN:
+                    draw.display_current_player()
                     pos = event.pos
                     # check if a dot was selected
                     for cell in cells:
