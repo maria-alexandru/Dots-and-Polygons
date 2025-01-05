@@ -4,6 +4,8 @@ import game_manager
 import math
 
 pygame.init()
+pygame.mixer.init()
+click_sound = pygame.mixer.Sound('assets/pop-268648.mp3')
 
 # Screen settings
 screen_width, screen_height = 1280, 720
@@ -242,6 +244,7 @@ def select_point(cell, pos):
     if collide:
         if cell.points[index] not in selected_points:
             selected_points.append(cell.points[index])
+            click_sound.play()
 
 
 def try_draw_line(cells):
