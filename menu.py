@@ -4,6 +4,7 @@ from button import Button
 import game_manager
 
 pygame.init()
+pygame.mixer.init()
 
 # Screen settings
 SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
