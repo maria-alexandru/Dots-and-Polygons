@@ -30,6 +30,7 @@ def init(size, mode):
     global grid_size, padding_height, padding_width, screen, rows, cols, cell_size, selected_mode
     grid_size = size
     selected_mode = mode
+
     rows = cols = grid_size - 1
     cell_size = min(screen_height / (grid_size + 1), screen_width / (grid_size + 1))
     screen = screen_width, screen_height
@@ -73,7 +74,6 @@ def update_points():
 def switch_player():
     global current_player
     current_player = (current_player + 1) % len(player_colors)  # Schimba între 0 si 1
-
 
 # function that displays current player and score
 def display_current_player():

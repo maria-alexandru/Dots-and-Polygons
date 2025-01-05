@@ -122,6 +122,10 @@ def create_buttons(screen_width, screen_height):
 def main_menu():
     global SCREEN, polygon_index, grid_size, opponent, music_volume
     buttons = create_buttons(SCREEN_WIDTH, SCREEN_HEIGHT)
+    gameManager = game_manager.GameManager()
+    gameManager.__setattr__("grid_size", grid_size)
+    gameManager.__setattr__("selected_mode", polygon_options[polygon_index])
+    gameManager.__setattr__("opponent", opponent)
 
     while True:
         SCREEN.blit(pygame.transform.scale(BG, (SCREEN.get_width(), SCREEN.get_height())), (0, 0))
@@ -158,6 +162,7 @@ def main_menu():
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[2].checkForInput(MENU_MOUSE_POS):  # Opponent button
                     opponent = "Computer" if opponent == "Player" else "Player"
+                    gameManager.__setattr__("opponent", opponent)
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[3].checkForInput(MENU_MOUSE_POS):  # Music button
                     music_volume = (music_volume + 10) % 110  # Increment volume or reset
@@ -167,7 +172,6 @@ def main_menu():
                     print("Starting Game with Settings:")
                     print(f"Polygon: {polygon_options[polygon_index]}, Grid: {grid_size}, Opponent: {opponent}")
                     print(f"Music Volume: {music_volume}%")
-                    gameManager = game_manager.GameManager()
                     gameManager.__setattr__("grid_size", grid_size)
                     gameManager.__setattr__("selected_mode", polygon_options[polygon_index])
                     gameManager.run()
