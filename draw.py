@@ -4,6 +4,7 @@ import game_manager
 import math
 
 pygame.init()
+pygame.mixer.init()
 click_sound = pygame.mixer.Sound('assets/pop-268648.mp3')
 
 # Screen settings

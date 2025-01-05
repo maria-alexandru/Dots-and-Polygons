@@ -62,7 +62,6 @@ class GameManager:
             if draw.current_player == 1 and self.opponent == "Computer" and robot_is_moving == False:
                 robot_is_moving = True
                 points = robot.make_move(cells, self.selected_mode)
-                time.sleep(0.4)
                 draw.selected_points.append(points[0])
                 draw.selected_points.append(points[1])
                 draw.try_draw_line(cells)
