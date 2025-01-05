@@ -1,5 +1,6 @@
 import random
 from cell_class import Cell
+import draw
 
 def get_available_lines(cells, mode):
     available_lines = []
@@ -25,22 +26,9 @@ class RobotOpponent:
         selected_edge, selected_cell = random.choice(available_edges)
         edge_start, edge_end = selected_edge
 
-        # for cell in cells:
-        #     for index, point in enumerate(cell.points):
-        #         if draw.is_same_point(point, edge_start) or draw.is_same_point(point, edge_end):
-        #             cell.dots[index] = True
-
-            # for index, edge in enumerate(selected_cell.edges):
-            #     if edge == selected_edge:
-            #         selected_cell.sides[index] = True
-                    # break
-
-        return edge_start, edge_end
+        for cell in cells:
+            for index, point in enumerate(cell.points):
+                if draw.is_same_point(point, edge_start) or draw.is_same_point(point, edge_end):
+                    cell.dots[index] = True
     
-
-    def play_turn(self, cells, draw_line_function):#, player_color):
-        move = self.make_move(cells)
-        if move:
-            edge_start, edge_end = move
-            if draw_line_function:
-                draw_line_function(cells)#edge_start, edge_end, (255, 0, 0), cells)
+        return edge_start, edge_end
