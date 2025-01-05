@@ -1,6 +1,7 @@
 import draw
 import cell_class
 import pygame
+from cell_class import is_board_full
 from robot_player_class import RobotOpponent
 
 class GameManager:
@@ -56,9 +57,18 @@ class GameManager:
                     # try to draw a line if 2 adjacent points were selected                   
                     draw.try_draw_line(cells)
 
+                    if is_board_full(cells, self.selected_mode):
+                        print("Board is full! Game Over.")
+                        draw.display_current_player()
+                        pygame.display.update()
+                        running = False
+                        break
+
                     # reset position
                     pos = (-1, -1)
-                       
+
+            if not running:
+                break
 
             pygame.display.update()
 
