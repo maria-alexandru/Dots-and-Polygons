@@ -76,10 +76,20 @@ class Cell:
 def is_board_full(cells, mode):
     all_complete = True
     for i, cell in enumerate(cells):
-        if not cell.is_square_complete():
-            print(f"Cell {i} incomplete for squares: {cell.sides[:4]}")
-            all_complete = False
+        if mode == "Square":
+            if not cell.is_square_complete():
+                print(f"Cell {i} incomplete for squares: {cell.sides[:4]}")
+                all_complete = False
 
+        elif mode == "Triangle":
+            if not cell.is_triangle_complete():
+                all_complete = False
+
+        elif mode == "Mix":
+            if not cell.is_square_complete():
+                if not cell.is_triangle_complete():
+                    all_complete = False
     if all_complete:
         print("Board is full.")
     return all_complete
+
