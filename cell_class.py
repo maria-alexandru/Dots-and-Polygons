@@ -72,6 +72,23 @@ class Cell:
         
         return False
     
+    def both_triangles_complete(self):
+        complete = 0
+        if self.sides[0] and self.sides[1] and self.sides[4]:
+            complete = complete + 1
+        
+        if self.sides[2] and self.sides[3] and self.sides[4]:
+            complete = complete + 1
+
+        if self.sides[1] and self.sides[2] and self.sides[5]:
+            complete = complete + 1
+        
+        if self.sides[0] and self.sides[3] and self.sides[5]:
+            complete = complete + 1
+
+        if complete == 2:
+            return True
+        return False 
     
     def update_dim(self, cell_size, padding_width, padding_height):
         self.rect = pygame.Rect((self.c + 1) * cell_size + padding_width, (self.r + 1) * cell_size + padding_height, cell_size, cell_size)
@@ -94,3 +111,22 @@ class Cell:
             self.rect.topleft, self.rect.topright, self.rect.bottomright, self.rect.bottomleft
         ]
 
+def is_board_full(cells, mode):
+    all_complete = True
+    for i, cell in enumerate(cells):
+        if mode == "Square":
+            if not cell.is_square_complete():
+                # print(f"Cell {i} incomplete for squares: {cell.sides[:4]}")
+                all_complete = False
+
+        elif mode == "Triangle":
+            if not cell.both_triangles_complete():
+                all_complete = False
+
+        elif mode == "Mix":
+            if not cell.is_square_complete():
+                if not cell.both_triangles_complete():
+                    all_complete = False
+    # if all_complete:
+    #     print("Board is full.")
+    return all_complete
