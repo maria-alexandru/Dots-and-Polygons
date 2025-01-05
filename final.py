@@ -71,7 +71,7 @@ def create_buttons(screen_width, screen_height):
 
 def final_menu():
     global SCREEN, polygon_index, grid_size, opponent, music_volume
-    buttons = create_buttons(SCREEN_WIDTH, SCREEN_HEIGHT)
+    buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
 
     while True:
         SCREEN.blit(pygame.transform.scale(BG, (SCREEN.get_width(), SCREEN.get_height())), (0, 0))
