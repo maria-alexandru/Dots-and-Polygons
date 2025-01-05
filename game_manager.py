@@ -6,7 +6,6 @@ from cell_class import is_board_full
 import time
 import color
 from final import final_menu
-
 class GameManager:
     _instance = None
 

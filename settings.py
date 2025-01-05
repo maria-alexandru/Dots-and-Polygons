@@ -2,7 +2,8 @@ import pygame
 import sys
 from button import Button
 import game_manager
-#from settings import settings_menu
+from menu import main_menu
+from menu import music_volume
 
 pygame.init()
 pygame.mixer.init()
@@ -21,9 +22,8 @@ polygon_options = ["Square", "Triangle", "Mix"]
 polygon_index = 0
 grid_size = 7
 opponent = "Player"
-music_volume = 20
-theme_options = ["1", "2", "3"]
-theme_id = 0
+#music_volume = 0
+
 
 # Load and play background music
 pygame.mixer.music.load("assets/Two Gong Fire - Ryan McCaffrey_Go By Ocean.mp3")
@@ -60,68 +60,60 @@ def create_buttons(screen_width, screen_height):
     resized_image2 = pygame.transform.scale(original_image, (360, 75))
 
     play_image = scale_image(resized_image1, scale_factor)
-    music_image = scale_image(resized_image2, scale_factor)
+    opponent_image = scale_image(resized_image2, scale_factor)
     grid_image = scale_image(resized_image2, scale_factor)
     polygon_image = scale_image(resized_image2, scale_factor)
+    menu_image = scale_image(resized_image2, scale_factor)
 
     title_button_spacing = int(screen_height * 0.25)
-    button_spacing_horizontal = int(30 * scale_factor)  # Distanta intre butoanele Play si Quit
+    
 
-    play_button = Button(
-        image=play_image,
-        pos=(screen_width // 2 - play_image.get_width() // 2 - button_spacing_horizontal // 2,
-             title_button_spacing + int(30 * scale_factor)),
-        text_input="PLAY",
-        font=font,
-        base_color="White",
-        hovering_color="#eae3ff",
-    )
-    quit_button = Button(
-        image=play_image,
-        pos=(screen_width // 2 + play_image.get_width() // 2 + button_spacing_horizontal // 2,
-             title_button_spacing + int(30 * scale_factor)),
-        text_input="QUIT",
-        font=font,
-        base_color="White",
-        hovering_color="#eae3ff",
-    )
-
-    settings_button = Button(
+    grid_button = Button(
         image=grid_image,
-        pos=(screen_width // 2, title_button_spacing + int(120 * scale_factor)),
-        text_input=f"Game Settings",
+        pos=(screen_width // 2, title_button_spacing + int(90 * scale_factor)),
+        text_input=f"Grid Size: {grid_size}",
         font=font,
         base_color="White",
         hovering_color="#d7fcd4",
     )
 
-    music_button = Button(
-        image=music_image,
-        pos=(screen_width // 2, title_button_spacing + int(215 * scale_factor)),
-        text_input=f"Music Volume: {music_volume}%",
-        font=font,
-        base_color="White",
-        hovering_color="#d7fcd4",
-    )
-    theme_button = Button(
+    polygon_button = Button(
         image=polygon_image,
-        pos=(screen_width // 2, title_button_spacing + int(310 * scale_factor)),
-        text_input=f"Theme: {theme_options[theme_id]}",
+        pos=(screen_width // 2, title_button_spacing + int(185 * scale_factor)),
+        text_input=f"Polygon: {polygon_options[polygon_index]}",
         font=font,
         base_color="White",
         hovering_color="#d7fcd4",
     )
-    return [music_button, play_button, quit_button, theme_button, settings_button]
+    
+    opponent_button = Button(
+        image=opponent_image,
+        pos=(screen_width // 2, title_button_spacing + int(280 * scale_factor)),
+        text_input=f"Opponent: {opponent}",
+        font=font,
+        base_color="White",
+        hovering_color="#d7fcd4",
+    )
+
+    menu_button = Button(
+        image=menu_image,
+        pos=(screen_width // 2, title_button_spacing + int(375 * scale_factor)),
+        text_input=f"BACK TO MENU",
+        font=font,
+        base_color="White",
+        hovering_color="#d7fcd4",
+    )
+    
+    return [polygon_button, grid_button, opponent_button, menu_button]
 
 
-def main_menu():
+def settings_menu():
     global SCREEN, polygon_index, grid_size, opponent, music_volume, theme_id
     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
     gameManager = game_manager.GameManager()
     gameManager.__setattr__("grid_size", grid_size)
     gameManager.__setattr__("selected_mode", polygon_options[polygon_index])
     gameManager.__setattr__("opponent", opponent)
-    gameManager.__setattr__("theme_id", theme_id)
 
     while True:
         SCREEN.blit(pygame.transform.scale(BG, (SCREEN.get_width(), SCREEN.get_height())), (0, 0))
@@ -130,8 +122,8 @@ def main_menu():
         # Draw title
         draw_text(
             SCREEN,
-            "MAIN MENU",
-            (SCREEN.get_width() // 2, int(75 * (SCREEN.get_height() / 720))),
+            "GAME SETTINGS",
+            (SCREEN.get_width() // 2, int(120 * (SCREEN.get_height() / 720))),
             get_font(int(70 * (SCREEN.get_width() / 1280))),
             "White",
         )
@@ -150,40 +142,28 @@ def main_menu():
                 SCREEN = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                 buttons = create_buttons(event.w, event.h)
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if buttons[0].checkForInput(MENU_MOUSE_POS):  # Music button
+                if buttons[0].checkForInput(MENU_MOUSE_POS):  # Polygon button
                     button_sound.play()
-                    music_volume = (music_volume + 10) % 110  # Increment volume or reset
-                    pygame.mixer.music.set_volume(music_volume / 100)  # Update music volume
+                    polygon_index = (polygon_index + 1) % len(polygon_options)  # Next polygon option
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
-                if buttons[1].checkForInput(MENU_MOUSE_POS):  # Play button
+                if buttons[1].checkForInput(MENU_MOUSE_POS):  # Grid button
                     button_sound.play()
-                    print("Starting Game with Settings:")
-                    print(f"Polygon: {polygon_options[polygon_index]}, Grid: {grid_size}, Opponent: {opponent}")
-                    print(f"Music Volume: {music_volume}%")
-                    gameManager.__setattr__("grid_size", grid_size)
-                    gameManager.__setattr__("selected_mode", polygon_options[polygon_index])
+                    grid_size = grid_size + 1 if grid_size < 10 else 7  # Increment grid size or reset
+                    buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
+                if buttons[2].checkForInput(MENU_MOUSE_POS):  # Opponent button
+                    button_sound.play()
+                    opponent = "Computer" if opponent == "Player" else "Player"
                     gameManager.__setattr__("opponent", opponent)
-                    gameManager.__setattr__("theme_id", theme_id)
-                    gameManager.run()
-                    # return
-                if buttons[2].checkForInput(MENU_MOUSE_POS):  # Quit button
-                    button_sound.play()
-                    pygame.quit()
-                    sys.exit()
-                if buttons[3].checkForInput(MENU_MOUSE_POS):  # Theme button
-                    button_sound.play()
-                    theme_id = (theme_id + 1) % len(theme_options)  # Next theme option
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
-                if buttons[4].checkForInput(MENU_MOUSE_POS):  # Settings button
-                    #settings_menu()
-                    button_sound.play()
-                    pygame.quit()
-                    sys.exit()
-
+                if buttons[3].checkForInput(MENU_MOUSE_POS):  # Back to Menu button
+                    main_menu()
         pygame.display.update()
 
+def run_settings():
+    settings_menu()
+
 def main():
-    main_menu()
+    settings_menu()
 
 if __name__ == "__main__":
     main()
