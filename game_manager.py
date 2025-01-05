@@ -1,14 +1,11 @@
 import draw
 import cell_class
 import pygame
+from robot_player_class import RobotOpponent
+import time
 
 class GameManager:
     _instance = None
-    
-    def __init__(self):
-        self.selected_mode = "Mix"
-        self.grid_size = 7
-
 
     # singleton
     def __new__(cls):
@@ -18,13 +15,14 @@ class GameManager:
 
 
     def run(self):
+        if self.opponent == "Computer":
+            robot = RobotOpponent()
+
         draw.init(self.grid_size, self.selected_mode)
         # add cells
         cells = []
-        nr = 0
         for c in range(draw.cols):
             for r in range(draw.rows):
-                nr = nr + 1
                 cell = cell_class.Cell(r, c, draw.cell_size, draw.padding_width, draw.padding_height)
                 cells.append(cell)
 
@@ -32,7 +30,8 @@ class GameManager:
         pos = ()
         draw.draw_grid(cells)
         draw.display_current_player()
-
+        robot_is_moving = False
+ 
         while running:
             draw.display_current_player()
             for event in pygame.event.get():
@@ -40,7 +39,7 @@ class GameManager:
                     running = False
                 elif event.type == pygame.VIDEORESIZE:
                     draw.draw_grid(cells)
-                elif event.type == pygame.MOUSEBUTTONDOWN:
+                elif event.type == pygame.MOUSEBUTTONDOWN and not(draw.current_player == 1 and self.opponent == "Computer"):
                     pos = event.pos
                     # check if a dot was selected
                     for cell in cells:
@@ -57,7 +56,18 @@ class GameManager:
 
                     # reset position
                     pos = (-1, -1)
-                       
+            draw.display_current_player()  
+            pygame.display.update()
+
+            if draw.current_player == 1 and self.opponent == "Computer" and robot_is_moving == False:
+                robot_is_moving = True
+                points = robot.make_move(cells, self.selected_mode)
+                draw.selected_points.append(points[0])
+                draw.selected_points.append(points[1])
+                draw.try_draw_line(cells)
+                robot_is_moving = False
+                time.sleep(0.4)
+                draw.click_sound.play()
 
             pygame.display.update()
 
