@@ -68,15 +68,21 @@ def switch_player():
     global current_player
     current_player = (current_player + 1) % len(player_colors)  # Schimbă între 0 și 1
 
+
 # Funcția care afișează jucătorul curent
 def display_current_player():
     global current_player, player1_score, player2_score
-    pygame.draw.rect(win, BACKGROUND_COLOR, (20, 20, 400, 60))
-    font = pygame.font.SysFont("Arial", 30)
 
     text = f"Current Player: Player {current_player + 1}"
     score_text = f"Player 1: {player1_score}  |  Player 2: {player2_score}"
 
+    font_size = find_best_font_size(score_text, padding_width) 
+    font = pygame.font.SysFont("Arial", font_size)
+    text_width, text_height = font.size(text)
+    text_height += font.size(score_text)[1]
+    #pygame.draw.rect(win, BACKGROUND_COLOR, (20, 20, text_width + 5, text_height + 5))
+    pygame.draw.rect(win, BACKGROUND_COLOR, (20, 20, text_width + 5, screen_height/2))
+    
     player_label = font.render(text, 1, player_colors[current_player])
     score_label = font.render(score_text, 1, (0, 0, 255))
 
@@ -85,6 +91,25 @@ def display_current_player():
 
     pygame.display.update()
 
+def find_best_font_size(text, max_width):
+    font_size = 1
+    best_font_size = font_size
+    
+    while True:
+        font = pygame.font.SysFont("Arial", font_size)
+        text_width, text_height = font.size(text)
+        #print(str(font_size) + " " + str(text_width) + " " + str(max_width) + " " + str(text))
+        if text_width <= max_width:
+            best_font_size = font_size
+        else:
+            break
+        
+        font_size += 1
+
+    if best_font_size > 30:
+        best_font_size = 30
+    return best_font_size
+    
 
 def draw_background():
     win.fill(BACKGROUND_COLOR)
