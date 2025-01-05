@@ -3,6 +3,7 @@ import cell_class
 import pygame
 from robot_player_class import RobotOpponent
 import time
+import color
 
 class GameManager:
     _instance = None
@@ -15,6 +16,11 @@ class GameManager:
 
 
     def run(self):
+        colors = color.Colors()
+        theme_id = 0
+        
+        draw.set_colors(colors.get_colors(), theme_id)
+
         if self.opponent == "Computer":
             robot = RobotOpponent()
 

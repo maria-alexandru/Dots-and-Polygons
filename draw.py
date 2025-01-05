@@ -14,11 +14,12 @@ pygame.display.set_caption("Dots and Polygons Menu")
 LINE_WIDTH = 8
 DOT_RADIUS = 8
 DOT_COLOR = (0, 0, 0)
-BACKGROUND_COLOR = (240, 240, 240)
+background_color = (240, 240, 240)
 
 # define colors for players
 # green for player 1, red for player 2
-player_colors = [(0, 255, 0), (255, 0, 0)]
+player_colors_fill = [(0, 255, 0), (255, 0, 0)]
+player_colors_lines = [(0, 255, 0), (255, 0, 0)]
 # current_player (0 or 1)
 current_player = 0
 
@@ -38,6 +39,18 @@ def init(size, mode):
     padding_height = (screen_height - (grid_size + 1) * cell_size) / 2
 
 selected_points = []
+
+
+def set_colors(colors, theme_id):
+    global player_colors_fill, player_colors_lines, background_color
+    player_colors_fill[0] = colors[f"player{theme_id}1"]["fill"]
+    player_colors_fill[1] = colors[f"player{theme_id}2"]["fill"]
+
+    player_colors_lines[0] = colors[f"player{theme_id}1"]["line"]
+    player_colors_lines[1] = colors[f"player{theme_id}2"]["line"]
+
+    background_color = colors[f"background{theme_id}"]
+
 
 # update variables based on screen resolution
 def get_size(cells):
@@ -73,7 +86,7 @@ def update_points():
 # change player after each move
 def switch_player():
     global current_player
-    current_player = (current_player + 1) % len(player_colors)  # Schimba între 0 si 1
+    current_player = (current_player + 1) % len(player_colors_fill)  # Schimba între 0 si 1
 
 # function that displays current player and score
 def display_current_player():
@@ -86,9 +99,9 @@ def display_current_player():
     font = pygame.font.SysFont("Arial", font_size)
     text_width, text_height = font.size(text)
     text_height += font.size(score_text)[1]
-    pygame.draw.rect(win, BACKGROUND_COLOR, (20, 20, padding_width, screen_height / 2))
+    pygame.draw.rect(win, background_color, (20, 20, padding_width, screen_height / 2))
     
-    player_label = font.render(text, 1, player_colors[current_player])
+    player_label = font.render(text, 1, player_colors_fill[current_player])
     score_label = font.render(score_text, 1, (0, 0, 255))
 
     win.blit(player_label, (20, 20))
@@ -117,7 +130,7 @@ def find_best_font_size(text, max_width):
     
 
 def draw_background():
-    win.fill(BACKGROUND_COLOR)
+    win.fill(background_color)
 
 
 def draw_grid(cells):
@@ -177,7 +190,7 @@ def set_triangle_color_draw(cell, triangle_points):
     global colored, colored2, player1_score, player2_score, current_player
     if cell.color_tr1 == (0, 0, 0):
         colored = True
-        cell.color_tr1 = player_colors[current_player]
+        cell.color_tr1 = player_colors_fill[current_player]
         cell.color_tr1_points = triangle_points
         if current_player == 0:
             player1_score += 1
@@ -187,7 +200,7 @@ def set_triangle_color_draw(cell, triangle_points):
     elif cell.color_tr2 == (0, 0, 0) and cell.color_tr1_points != triangle_points:
         colored2 = True
 
-        cell.color_tr2 = player_colors[current_player]
+        cell.color_tr2 = player_colors_fill[current_player]
         cell.color_tr2_points = triangle_points
 
         if current_player == 0:
@@ -238,7 +251,7 @@ def detect_and_color_surface(cells, mode):
 
             if cell.color == (0, 0, 0):
                 colored = True
-                cell.color = player_colors[current_player]
+                cell.color = player_colors_fill[current_player]
                 if current_player == 0:
                     player1_score += 1
                 else:
@@ -347,7 +360,7 @@ def try_draw_line(cells):
                                 selected_points = []
                                 
                                 if aux == False:
-                                    draw_line(point1, point2, player_colors[current_player])
+                                    draw_line(point1, point2, player_colors_fill[current_player])
                                     switch_player()
                                     aux = True
 
@@ -370,7 +383,7 @@ def remove_not_selected_dots(cells):
                     if is_same_point(s_point, point) and dot_not_in_line(cells, point):
                         # set the dot to false
                         cell.dots[index] = False
-                        pygame.draw.circle(win, BACKGROUND_COLOR, point, DOT_RADIUS + 5)
+                        pygame.draw.circle(win, background_color, point, DOT_RADIUS + 5)
                         pygame.draw.circle(win, DOT_COLOR, point, DOT_RADIUS)
             selected_points.remove(s_point)
 
