@@ -4,6 +4,7 @@ import game_manager
 import math
 
 pygame.init()
+click_sound = pygame.mixer.Sound('assets/pop-268648.mp3')
 
 # Screen settings
 screen_width, screen_height = 1280, 720
@@ -91,7 +92,7 @@ def display_current_player():
     score_label = font.render(score_text, 1, (0, 0, 255))
 
     win.blit(player_label, (20, 20))
-    win.blit(score_label, (20, 50))
+    win.blit(score_label, (20, 25 + font.size(text)[1]))
 
     pygame.display.update()
 
@@ -110,8 +111,8 @@ def find_best_font_size(text, max_width):
             break
         font_size += 1
 
-    if best_font_size > 30:
-        best_font_size = 30
+    if best_font_size > 40:
+        best_font_size = 40
     return best_font_size
     
 
@@ -290,6 +291,7 @@ def select_point(cell, pos):
     if collide:
         if not is_in_selected_points(cell.points[index]):
             selected_points.append(cell.points[index])
+            click_sound.play()
 
 
 def is_in_selected_points(point):
