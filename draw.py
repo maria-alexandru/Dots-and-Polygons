@@ -2,7 +2,7 @@ import ctypes
 import pygame
 import game_manager
 import math
-
+from robot_player_class import RobotOpponent
 pygame.init()
 pygame.mixer.init()
 click_sound = pygame.mixer.Sound('assets/pop-268648.mp3')

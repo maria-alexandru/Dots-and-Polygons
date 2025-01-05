@@ -1,6 +1,7 @@
 import draw
 import cell_class
 import pygame
+from robot_player_class import RobotOpponent
 
 class GameManager:
     _instance = None

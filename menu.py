@@ -158,6 +158,7 @@ def main_menu():
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[2].checkForInput(MENU_MOUSE_POS):  # Opponent button
                     opponent = "Computer" if opponent == "Player" else "Player"
+                    game_manager.GameManager().__setattr__("opponent", opponent)
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[3].checkForInput(MENU_MOUSE_POS):  # Music button
                     music_volume = (music_volume + 10) % 110  # Increment volume or reset
