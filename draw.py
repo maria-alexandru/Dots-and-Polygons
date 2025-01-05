@@ -337,6 +337,12 @@ def try_draw_line(cells):
                                 if selected_mode == "Mix" and cell.is_square_complete() and (edge_index == 4 or edge_index == 5):
                                     continue
 
+                                if selected_mode in ["Triangle", "Mix"]:
+                                    if edge_index == 4 and cell.sides[5] == True:
+                                        continue
+                                    if edge_index == 5 and cell.sides[4] == True:
+                                        continue
+
                                 cell.sides[edge_index] = True
                                 selected_points = []
                                 

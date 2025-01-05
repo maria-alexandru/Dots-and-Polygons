@@ -9,6 +9,11 @@ def get_available_lines(cells, mode):
             if not side:
                 if (index == 4 or index == 5) and mode == "Square":
                     continue
+                if mode in ["Triangle", "Mix"]:
+                    if index == 4 and cell.sides[5] == True:
+                        continue
+                    if index == 5 and cell.sides[4] == True:
+                        continue
                 edge = (cell.edges[index], cell)
                 available_lines.append(edge)
     return available_lines
