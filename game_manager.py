@@ -17,7 +17,7 @@ class GameManager:
 
     def run(self):
         colors = color.Colors()
-        theme_id = 1
+        theme_id = 2
         
         draw.set_colors(colors.get_colors(), theme_id)
 
