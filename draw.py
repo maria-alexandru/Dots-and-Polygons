@@ -4,6 +4,9 @@ import game_manager
 import math
 
 pygame.init()
+pygame.mixer.init()
+click_sound = pygame.mixer.Sound('assets/pop-268648.mp3')
+draw_sound = pygame.mixer.Sound('assets/sound-effect-twinklesparkle-115095.mp3')
 
 # Screen settings
 screen_width, screen_height = 1280, 720
@@ -15,9 +18,11 @@ DOT_RADIUS = 8
 DOT_COLOR = (0, 0, 0)
 BACKGROUND_COLOR = (240, 240, 240)
 
-# Definirea culorilor pentru jucători
-player_colors = [(0, 255, 0), (255, 0, 0)]  # Verde pentru primul jucător, Roșu pentru al doilea jucător
-current_player = 0  # Jucătorul curent (0 sau 1)
+# define colors for players
+# green for player 1, red for player 2
+player_colors = [(0, 255, 0), (255, 0, 0)]
+# current_player (0 or 1)
+current_player = 0
 
 player1_score = 0
 player2_score = 0
@@ -27,16 +32,14 @@ def init(size, mode):
     global grid_size, padding_height, padding_width, screen, rows, cols, cell_size, selected_mode
     grid_size = size
     selected_mode = mode
+
     rows = cols = grid_size - 1
     cell_size = min(screen_height / (grid_size + 1), screen_width / (grid_size + 1))
     screen = screen_width, screen_height
     padding_width = (screen_width - (grid_size + 1) * cell_size) / 2
     padding_height = (screen_height - (grid_size + 1) * cell_size) / 2
 
-lines = []
 selected_points = []
-connected_points = []
-
 
 # update variables based on screen resolution
 def get_size(cells):
@@ -44,7 +47,7 @@ def get_size(cells):
 
     # get the screen resolution (width and height)
     info = pygame.display.Info()
-    # update_points()
+    update_points()
     screen_width = info.current_w
     screen_height = info.current_h
     cell_size = min(screen_height / (grid_size + 1), screen_width / (grid_size + 1))
@@ -59,17 +62,22 @@ def get_size(cells):
 def update_points():
     global selected_points
     info = pygame.display.Info()
-    updated_points = [(math.floor(x * screen_width / info.current_w), math.floor(y * screen_height / info.current_h)) for x, y in selected_points]
+    new_screen_width = info.current_w
+    new_screen_height = info.current_h
+    new_cell_size = min(new_screen_height / (grid_size + 1), new_screen_width / (grid_size + 1))
+    new_padding_width = (new_screen_width - (grid_size + 1) * new_cell_size) / 2
+    new_padding_height = (new_screen_height - (grid_size + 1) * new_cell_size) / 2
+
+    updated_points = [(math.floor((x - padding_width) // cell_size * new_cell_size + new_padding_width), math.floor((y - padding_height) // cell_size * new_cell_size + new_padding_height)) for (x, y) in selected_points]
     selected_points = updated_points
 
 
-# Schimbă jucătorul după fiecare mutare
+# change player after each move
 def switch_player():
     global current_player
-    current_player = (current_player + 1) % len(player_colors)  # Schimbă între 0 și 1
+    current_player = (current_player + 1) % len(player_colors)  # Schimba între 0 si 1
 
-
-# Funcția care afișează jucătorul curent
+# function that displays current player and score
 def display_current_player():
     global current_player, player1_score, player2_score
 
@@ -80,14 +88,13 @@ def display_current_player():
     font = pygame.font.SysFont("Arial", font_size)
     text_width, text_height = font.size(text)
     text_height += font.size(score_text)[1]
-    #pygame.draw.rect(win, BACKGROUND_COLOR, (20, 20, text_width + 5, text_height + 5))
-    pygame.draw.rect(win, BACKGROUND_COLOR, (20, 20, text_width + 5, screen_height/2))
+    pygame.draw.rect(win, BACKGROUND_COLOR, (20, 20, padding_width, screen_height / 2))
     
     player_label = font.render(text, 1, player_colors[current_player])
     score_label = font.render(score_text, 1, (0, 0, 255))
 
     win.blit(player_label, (20, 20))
-    win.blit(score_label, (20, 50))
+    win.blit(score_label, (20, 25 + font.size(text)[1]))
 
     pygame.display.update()
 
@@ -111,6 +118,25 @@ def find_best_font_size(text, max_width):
     return best_font_size
     
 
+# find font size for text to fit in max_width
+def find_best_font_size(text, max_width):
+    font_size = 1
+    best_font_size = font_size
+    
+    while True:
+        font = pygame.font.SysFont("Arial", font_size)
+        text_width, text_height = font.size(text)
+        if text_width <= max_width:
+            best_font_size = font_size
+        else:
+            break
+        font_size += 1
+
+    if best_font_size > 40:
+        best_font_size = 40
+    return best_font_size
+    
+
 def draw_background():
     win.fill(BACKGROUND_COLOR)
 
@@ -129,7 +155,7 @@ def draw_grid(cells):
         detect_and_color_surface(cells, game_manager.GameManager().selected_mode)
         for index, side in enumerate(cell.sides):
             if side == True:
-                draw_line(cell.edges[index][0],  cell.edges[index][1], (130, 208, 209), cells)
+                draw_line(cell.edges[index][0],  cell.edges[index][1], (130, 208, 209))
 
         for index, dot in enumerate(cell.dots):
             if dot == True:
@@ -138,82 +164,117 @@ def draw_grid(cells):
     pygame.display.update()
 
 
+def draw_square(cell):
+    pygame.draw.rect(win, cell.color, cell.rect)
+    draw_line(cell.rect.topleft, cell.rect.topright, (130, 208, 209))
+    draw_line(cell.rect.topright, cell.rect.bottomright, (130, 208, 209))
+    draw_line(cell.rect.bottomright, cell.rect.bottomleft, (130, 208, 209))
+    draw_line(cell.rect.bottomleft, cell.rect.topleft, (130, 208, 209))
+    
+    pygame.draw.circle(win, (130, 109, 168), cell.rect.topright, DOT_RADIUS + 4)
+    pygame.draw.circle(win, (130, 109, 168), cell.rect.topleft, DOT_RADIUS + 4)
+    pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomleft, DOT_RADIUS + 4)
+    pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomright, DOT_RADIUS + 4)
+
+
+def draw_triangle(cell, triangle_points):
+    if cell.color_tr1_points == triangle_points:
+        color = cell.color_tr1
+    elif cell.color_tr2 != (0,0,0):
+        color = cell.color_tr2
+
+    pygame.draw.polygon(win, color, triangle_points)
+
+    draw_line(triangle_points[0], triangle_points[1], (130, 208, 209))
+    draw_line(triangle_points[1], triangle_points[2], (130, 208, 209))
+    draw_line(triangle_points[2], triangle_points[0], (130, 208, 209))
+    
+    pygame.draw.circle(win, (130, 109, 168), triangle_points[0], DOT_RADIUS + 4)
+    pygame.draw.circle(win, (130, 109, 168), triangle_points[1], DOT_RADIUS + 4)
+    pygame.draw.circle(win, (130, 109, 168), triangle_points[2], DOT_RADIUS + 4)
+
+
+def set_triangle_color_draw(cell, triangle_points):
+    global colored, colored2, player1_score, player2_score, current_player
+    if cell.color_tr1 == (0, 0, 0):
+        colored = True
+        cell.color_tr1 = player_colors[current_player]
+        cell.color_tr1_points = triangle_points
+        if current_player == 0:
+            draw_sound.play()
+            player1_score += 1
+        else:
+            draw_sound.play()
+            player2_score += 1
+
+    elif cell.color_tr2 == (0, 0, 0) and cell.color_tr1_points != triangle_points:
+        colored2 = True
+
+        cell.color_tr2 = player_colors[current_player]
+        cell.color_tr2_points = triangle_points
+
+        if current_player == 0:
+            draw_sound.play()
+            player1_score += 1
+        else:
+            draw_sound.play()
+            player2_score += 1
+
+    draw_triangle(cell, triangle_points)
+    
+
 # check if a polygon is completed and draw it
 def detect_and_color_surface(cells, mode):
-    global player1_score, player2_score
+    global player1_score, player2_score, colored, colored2
     colored = False
+    colored2 = False
     switch_player()
-    for cell in cells:
+    for cell in cells:         
+        if mode in ["Triangle", "Mix"] and cell.is_triangle_complete():
+            if mode == "Mix" and cell.is_square and not cell.is_triangle:
+                continue
+
+            cell.is_triangle = True
+
+            if cell.sides[0] and cell.sides[1] and cell.sides[4]:
+                triangle_points = [cell.points[0], cell.points[1], cell.points[2]]
+                set_triangle_color_draw(cell, triangle_points)
+        
+            if cell.sides[2] and cell.sides[3] and cell.sides[4]:
+                triangle_points = [cell.points[0], cell.points[2], cell.points[3]]
+                set_triangle_color_draw(cell, triangle_points)
+
+            if cell.sides[1] and cell.sides[2] and cell.sides[5]:
+                triangle_points = [cell.points[1], cell.points[2], cell.points[3]]
+                set_triangle_color_draw(cell, triangle_points)
+
+            if cell.sides[0] and cell.sides[3] and cell.sides[5]:
+                triangle_points = [cell.points[0], cell.points[1], cell.points[3]]
+                set_triangle_color_draw(cell, triangle_points)
+
+            cell.winner = "Player"
+        
         # detect complete square
         if mode in ["Square", "Mix"] and cell.is_square_complete():
+            if mode == "Mix" and cell.is_triangle:
+                continue
+            
+            cell.is_square = True
+
             if cell.color == (0, 0, 0):
                 colored = True
                 cell.color = player_colors[current_player]
-                if current_player == 0:  # Jucătorul 1
+                if current_player == 0:
+                    draw_sound.play()
                     player1_score += 1
-                else:  # Jucătorul 2
+                else:
+                    draw_sound.play()
                     player2_score += 1
 
-            pygame.draw.rect(win, cell.color, cell.rect)
-            draw_line(cell.rect.topleft, cell.rect.topright, (130, 208, 209), cells)
-            draw_line(cell.rect.topright, cell.rect.bottomright, (130, 208, 209), cells)
-            draw_line(cell.rect.bottomright, cell.rect.bottomleft, (130, 208, 209), cells)
-            draw_line(cell.rect.bottomleft, cell.rect.topleft, (130, 208, 209), cells)
-            
-            pygame.draw.circle(win, (130, 109, 168), cell.rect.topright, DOT_RADIUS + 4)
-            pygame.draw.circle(win, (130, 109, 168), cell.rect.topleft, DOT_RADIUS + 4)
-            pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomleft, DOT_RADIUS + 4)
-            pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomright, DOT_RADIUS + 4)
-            
+            draw_square(cell)
             cell.winner = "Player"
 
-
-        if mode in ["Triangle", "Mix"] and cell.is_triangle_complete():
-
-            if cell.sides[0] and cell.sides[3] and cell.sides[4]:
-                triangle_points = [cell.rect.topleft, cell.rect.topright, cell.rect.bottomleft]
-                if cell.color == (0, 0, 0):
-                    cell.color = player_colors[current_player]
-                    if current_player == 0:  # Jucătorul 1
-                        player1_score += 1
-                    else:  # Jucătorul 2
-                        player2_score += 1
-
-                pygame.draw.polygon(win, cell.color, triangle_points)
-                draw_line(cell.rect.topleft, cell.rect.topright, (130, 208, 209), cells)
-                draw_line(cell.rect.topleft, cell.rect.bottomleft, (130, 208, 209), cells)
-                draw_line(cell.rect.topright, cell.rect.bottomleft, (130, 208, 209), cells)
-                
-                pygame.draw.circle(win, (130, 109, 168), cell.rect.topright, DOT_RADIUS + 4)
-                pygame.draw.circle(win, (130, 109, 168), cell.rect.topleft, DOT_RADIUS + 4)
-                pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomleft, DOT_RADIUS + 4)
-
-            elif cell.sides[2] and cell.sides[1] and cell.sides[5]:
-                triangle_points = [cell.rect.topright, cell.rect.bottomright, cell.rect.bottomleft]
-                if cell.color == (0, 0, 0):
-                    cell.color = player_colors[current_player]
-                    if current_player == 0:  # Jucătorul 1
-                        player1_score += 1
-                    else:  # Jucătorul 2
-                        player2_score += 1
-                
-                pygame.draw.polygon(win, cell.color, triangle_points)
-                draw_line(cell.rect.topright, cell.rect.bottomright, (130, 208, 209), cells)
-                draw_line(cell.rect.topright, cell.rect.bottomleft, (130, 208, 209), cells)
-                draw_line(cell.rect.bottomleft, cell.rect.bottomright, (130, 208, 209), cells)
-
-                pygame.draw.circle(win, (130, 109, 168), cell.rect.topright, DOT_RADIUS + 4)
-                pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomleft, DOT_RADIUS + 4)
-                pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomright, DOT_RADIUS + 4)
-                
-
-            else:
-                continue
-            # switch_player()
-            # print("triunghi" + str(current_player))
-
-            cell.winner = "Player"
-    if colored == False:
+    if colored == False and colored2 == False:
         switch_player()
 
 
@@ -223,10 +284,7 @@ def is_point_inside_cell(point, cell):
 
 
 # draw line between dots
-def draw_line(start, end, color, cells):
-    global lines
-    #color = player_colors[current_player]  # Folosește culoarea jucătorului curent
-    
+def draw_line(start, end, color):
     pygame.draw.line(win, color, start, end, LINE_WIDTH)
     pygame.draw.circle(win, (130, 109, 168), start, DOT_RADIUS + 4)
     pygame.draw.circle(win, (130, 109, 168), end, DOT_RADIUS + 4)
@@ -246,16 +304,9 @@ def is_adjacent(p1, p2):
         return True
 
     # diagonal adjacency
-    if abs(abs(x1 - x2) - cell_size) <= cell_size and abs(abs(y1 - y2) - cell_size) <= cell_size:
+    if abs(abs(x1 - x2) - cell_size) <= 1 and abs(abs(y1 - y2) - cell_size) <= 1\
+        and selected_mode in ["Triangle", "Mix"]:
         return True
-    return False
-
-
-# verify if the dot is connected to a line
-def is_connected(point):
-    for line in lines:
-        if point in line:
-            return True
     return False
 
 
@@ -265,8 +316,24 @@ def select_point(cell, pos):
     collide, index = collide_circle(cell, pos)
     # if the pos collides with a dot, add the dot's coordinates to the selected_points list
     if collide:
-        if cell.points[index] not in selected_points:
+        if not is_in_selected_points(cell.points[index]):
             selected_points.append(cell.points[index])
+            click_sound.play()
+
+
+def is_in_selected_points(point):
+    for s_point in selected_points:
+        if is_same_point(point, s_point):
+            return True
+    return False
+
+
+def is_same_point(point1, point2):
+    (x1, y1) = point1
+    (x2, y2) = point2
+    if abs(x2 - x1) <= 1 and abs(y2 - y1) <= 1:
+        return True
+    return False
 
 
 def try_draw_line(cells):
@@ -281,7 +348,6 @@ def try_draw_line(cells):
                 if is_adjacent(point1, point2) and point1 != point2:   
                     line = tuple(sorted((point1, point2)))
                     
-                    
                     for cell in cells:
                         for edge_index, edge in enumerate(cell.edges):
                             edge = tuple(sorted((edge[0], edge[1])))
@@ -294,23 +360,70 @@ def try_draw_line(cells):
                             if math.sqrt((x3 - x1)**2 + (y3 - y1)**2) <= 2\
                                 and math.sqrt((x4 - x2)**2 + (y4 - y2)**2) <= 2\
                                 and cell.sides[edge_index] == False:
+
+                                if selected_mode == "Mix" and cell.is_square_complete() and (edge_index == 4 or edge_index == 5):
+                                    continue
+
+                                if selected_mode in ["Triangle", "Mix"]:
+                                    if edge_index == 4 and cell.sides[5] == True:
+                                        continue
+                                    if edge_index == 5 and cell.sides[4] == True:
+                                        continue
+
                                 cell.sides[edge_index] = True
                                 selected_points = []
                                 
-                                
                                 if aux == False:
-                                    draw_line(point1, point2, player_colors[current_player], cells)
+                                    draw_line(point1, point2, player_colors[current_player])
                                     switch_player()
-                                    print("linie" + str(current_player))
                                     aux = True
 
-                            
+                    # check if a polygon was completed and draw it
                     detect_and_color_surface(cells, selected_mode)
-                                
-                    
+
+                elif len(selected_points) >= 1 and point1 != point2:
+                    remove_not_selected_dots(cells)
+
         if len(selected_points) >= 8:
             # reset selection
             selected_points = []
+
+def remove_not_selected_dots(cells):
+    last_point = selected_points[-1]
+    for s_point in selected_points:
+        if last_point and s_point != last_point:
+            for cell in cells:
+                for index, point in enumerate(cell.points):
+                    if is_same_point(s_point, point) and dot_not_in_line(cells, point):
+                        # set the dot to false
+                        cell.dots[index] = False
+                        pygame.draw.circle(win, BACKGROUND_COLOR, point, DOT_RADIUS + 5)
+                        pygame.draw.circle(win, DOT_COLOR, point, DOT_RADIUS)
+            selected_points.remove(s_point)
+
+    if last_point:
+        pygame.draw.circle(win, (130, 109, 168), last_point, DOT_RADIUS + 4)               
+                    
+
+def dot_not_in_line(cells, point):
+    for cell in cells:
+        for index, cell_point in enumerate(cell.points):
+            if is_same_point(cell_point, point):
+                if cell.sides[index] == True:
+                    return False
+                                    
+                elif index >= 1 and cell.sides[index - 1] == True:
+                    return False
+                
+                elif selected_mode in ["Square", "Mix"] and index == 0 and cell.sides[3] == True:
+                    return False
+
+                elif selected_mode in ["Triangle", "Mix"] and (index == 0 or index == 2) and cell.sides[4] == True:
+                    return False
+                
+                elif selected_mode in ["Triangle", "Mix"] and (index == 1 or index == 3) and cell.sides[5] == True:
+                    return False
+    return True
 
 
 # draw colored dots when it is selected
