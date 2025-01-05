@@ -6,6 +6,7 @@ import math
 pygame.init()
 pygame.mixer.init()
 click_sound = pygame.mixer.Sound('assets/pop-268648.mp3')
+draw_sound = pygame.mixer.Sound('assets/sound-effect-twinklesparkle-115095.mp3')
 
 # Screen settings
 screen_width, screen_height = 1280, 720
@@ -241,8 +242,10 @@ def detect_and_color_surface(cells, mode):
                 colored = True
                 cell.color = player_colors[current_player]
                 if current_player == 0:
+                    draw_sound.play()
                     player1_score += 1
                 else:
+                    draw_sound.play()
                     player2_score += 1
 
             draw_square(cell)
