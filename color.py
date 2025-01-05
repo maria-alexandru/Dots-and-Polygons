@@ -8,7 +8,7 @@ class Colors:
         self.player2_fill = (129, 206, 227)
 
         self.background1 = (255, 248, 181)
-        self.background2 = (245, 173, 247)
+        self.neutral_line0 = (81, 111, 130)
 
         #theme 2
         self.player12_line = (78, 163, 163)
@@ -16,6 +16,10 @@ class Colors:
 
         self.player22_line = (84, 161, 132)
         self.player22_fill = (168, 230, 207)
+
+        self.background2 = (245, 173, 247)
+        self.neutral_line1 = (84, 161, 132)
+
 
     def get_colors(self):
         return {
@@ -35,6 +39,8 @@ class Colors:
                 "line": self.player22_line,
                 "fill": self.player22_fill
             },
+            "neutral_line0": self.neutral_line0,
+            "neutral_line1": self.neutral_line0,
             "background0": self.background1,
             "background1": self.background2
         }

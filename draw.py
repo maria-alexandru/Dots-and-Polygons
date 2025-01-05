@@ -15,6 +15,7 @@ LINE_WIDTH = 8
 DOT_RADIUS = 8
 DOT_COLOR = (0, 0, 0)
 background_color = (240, 240, 240)
+line_color = (130, 208, 209)
 
 # define colors for players
 # green for player 1, red for player 2
@@ -147,7 +148,7 @@ def draw_grid(cells):
         detect_and_color_surface(cells, game_manager.GameManager().selected_mode)
         for index, side in enumerate(cell.sides):
             if side == True:
-                draw_line(cell.edges[index][0],  cell.edges[index][1], (130, 208, 209))
+                draw_line(cell.edges[index][0],  cell.edges[index][1], line_color)
 
         for index, dot in enumerate(cell.dots):
             if dot == True:
@@ -158,10 +159,10 @@ def draw_grid(cells):
 
 def draw_square(cell):
     pygame.draw.rect(win, cell.color, cell.rect)
-    draw_line(cell.rect.topleft, cell.rect.topright, (130, 208, 209))
-    draw_line(cell.rect.topright, cell.rect.bottomright, (130, 208, 209))
-    draw_line(cell.rect.bottomright, cell.rect.bottomleft, (130, 208, 209))
-    draw_line(cell.rect.bottomleft, cell.rect.topleft, (130, 208, 209))
+    draw_line(cell.rect.topleft, cell.rect.topright, line_color)
+    draw_line(cell.rect.topright, cell.rect.bottomright, line_color)
+    draw_line(cell.rect.bottomright, cell.rect.bottomleft, line_color)
+    draw_line(cell.rect.bottomleft, cell.rect.topleft, line_color)
     
     pygame.draw.circle(win, (130, 109, 168), cell.rect.topright, DOT_RADIUS + 4)
     pygame.draw.circle(win, (130, 109, 168), cell.rect.topleft, DOT_RADIUS + 4)
@@ -177,9 +178,9 @@ def draw_triangle(cell, triangle_points):
 
     pygame.draw.polygon(win, color, triangle_points)
 
-    draw_line(triangle_points[0], triangle_points[1], (130, 208, 209))
-    draw_line(triangle_points[1], triangle_points[2], (130, 208, 209))
-    draw_line(triangle_points[2], triangle_points[0], (130, 208, 209))
+    draw_line(triangle_points[0], triangle_points[1], line_color)
+    draw_line(triangle_points[1], triangle_points[2], line_color)
+    draw_line(triangle_points[2], triangle_points[0], line_color)
     
     pygame.draw.circle(win, (130, 109, 168), triangle_points[0], DOT_RADIUS + 4)
     pygame.draw.circle(win, (130, 109, 168), triangle_points[1], DOT_RADIUS + 4)
@@ -360,7 +361,7 @@ def try_draw_line(cells):
                                 selected_points = []
                                 
                                 if aux == False:
-                                    draw_line(point1, point2, player_colors_fill[current_player])
+                                    draw_line(point1, point2, player_colors_lines[current_player])
                                     switch_player()
                                     aux = True
 
