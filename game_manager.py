@@ -19,9 +19,8 @@ class GameManager:
 
     def run(self):
         colors = color.Colors()
-        theme_id = 2
         
-        draw.set_colors(colors.get_colors(), theme_id)
+        draw.set_colors(colors.get_colors(), self.theme_id)
 
         if self.opponent == "Computer":
             robot = RobotOpponent()
@@ -85,7 +84,7 @@ class GameManager:
                 pygame.display.update()
                 time.sleep(0.6)
                 running = False
-                final_menu()
+                final_menu(draw.player1_score, draw.player2_score)
                 break
 
 
