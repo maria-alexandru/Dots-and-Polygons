@@ -68,6 +68,7 @@ class GameManager:
                 draw.try_draw_line(cells)
                 robot_is_moving = False
                 time.sleep(0.4)
+                draw.click_sound.play()
 
             pygame.display.update()
 

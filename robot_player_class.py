@@ -32,3 +32,4 @@ class RobotOpponent:
                     cell.dots[index] = True
     
         return edge_start, edge_end
+    
