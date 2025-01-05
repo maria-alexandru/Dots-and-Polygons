@@ -123,7 +123,7 @@ def create_buttons(screen_width, screen_height):
 
 def main_menu():
     global SCREEN, polygon_index, grid_size, opponent, music_volume
-    buttons = create_buttons(SCREEN_WIDTH, SCREEN_HEIGHT)
+    buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
     gameManager = game_manager.GameManager()
     gameManager.__setattr__("grid_size", grid_size)
     gameManager.__setattr__("selected_mode", polygon_options[polygon_index])
@@ -190,5 +190,8 @@ def main_menu():
 
         pygame.display.update()
 
+def main():
+    main_menu()
 
-main_menu()
+if __name__ == "__main__":
+    main()

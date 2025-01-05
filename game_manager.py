@@ -2,7 +2,10 @@ import draw
 import cell_class
 import pygame
 from robot_player_class import RobotOpponent
+from cell_class import is_board_full
 import time
+import color
+from final import final_menu
 
 class GameManager:
     _instance = None
@@ -15,6 +18,11 @@ class GameManager:
 
 
     def run(self):
+        colors = color.Colors()
+        theme_id = 2
+        
+        draw.set_colors(colors.get_colors(), theme_id)
+
         if self.opponent == "Computer":
             robot = RobotOpponent()
 
@@ -45,7 +53,7 @@ class GameManager:
                     for cell in cells:
                         collide, index = draw.collide_circle(cell, pos)
                         if pos and collide:
-                            draw.draw_circle(cell.points[index][0], cell.points[index][1], (130, 109, 168))
+                            draw.draw_circle(cell.points[index][0], cell.points[index][1], draw.selected_dot_color)
                             cell.dots[index] = True
 
                             # if a dot was selected, add it to the selected_points
@@ -70,5 +78,15 @@ class GameManager:
                 draw.click_sound.play()
 
             pygame.display.update()
+
+            if is_board_full(cells, self.selected_mode):
+                # print("Board is full! Game Over.")
+                draw.display_current_player()
+                pygame.display.update()
+                time.sleep(0.6)
+                running = False
+                final_menu()
+                break
+
 
         pygame.quit()
