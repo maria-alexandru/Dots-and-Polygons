@@ -17,8 +17,8 @@ class GameManager:
 
     def run(self):
         colors = color.Colors()
-        theme_id = 0
-
+        theme_id = 1
+        
         draw.set_colors(colors.get_colors(), theme_id)
 
         if self.opponent == "Computer":
@@ -68,7 +68,6 @@ class GameManager:
             if draw.current_player == 1 and self.opponent == "Computer" and robot_is_moving == False:
                 robot_is_moving = True
                 points = robot.make_move(cells, self.selected_mode)
-                time.sleep(0.4)
                 draw.selected_points.append(points[0])
                 draw.selected_points.append(points[1])
                 draw.try_draw_line(cells)

@@ -31,11 +31,11 @@ class Colors:
                 "line": self.player2_line,
                 "fill": self.player2_fill
             },
-            "player12": {
+            "player11": {
                 "line": self.player12_line,
                 "fill": self.player12_fill
             },
-            "player22": {
+            "player12": {
                 "line": self.player22_line,
                 "fill": self.player22_fill
             },

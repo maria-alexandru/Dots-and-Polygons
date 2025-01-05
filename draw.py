@@ -4,7 +4,9 @@ import game_manager
 import math
 
 pygame.init()
+pygame.mixer.init()
 click_sound = pygame.mixer.Sound('assets/pop-268648.mp3')
+draw_sound = pygame.mixer.Sound('assets/sound-effect-twinklesparkle-115095.mp3')
 
 # Screen settings
 screen_width, screen_height = 1280, 720
@@ -44,7 +46,6 @@ selected_points = []
 
 def set_colors(colors, theme_id):
     global player_colors_fill, player_colors_lines, background_color, line_color
-
     player_colors_fill[0] = colors[f"player{theme_id}1"]["fill"]
     player_colors_fill[1] = colors[f"player{theme_id}2"]["fill"]
 
@@ -196,8 +197,10 @@ def set_triangle_color_draw(cell, triangle_points):
         cell.color_tr1 = player_colors_fill[current_player]
         cell.color_tr1_points = triangle_points
         if current_player == 0:
+            draw_sound.play()
             player1_score += 1
         else:
+            draw_sound.play()
             player2_score += 1
 
     elif cell.color_tr2 == (0, 0, 0) and cell.color_tr1_points != triangle_points:
@@ -207,8 +210,10 @@ def set_triangle_color_draw(cell, triangle_points):
         cell.color_tr2_points = triangle_points
 
         if current_player == 0:
+            draw_sound.play()
             player1_score += 1
         else:
+            draw_sound.play()
             player2_score += 1
 
     draw_triangle(cell, triangle_points)
@@ -256,8 +261,10 @@ def detect_and_color_surface(cells, mode):
                 colored = True
                 cell.color = player_colors_fill[current_player]
                 if current_player == 0:
+                    draw_sound.play()
                     player1_score += 1
                 else:
+                    draw_sound.play()
                     player2_score += 1
 
             draw_square(cell)
