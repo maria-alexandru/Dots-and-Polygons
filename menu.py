@@ -2,7 +2,6 @@ import pygame
 import sys
 from button import Button
 import game_manager
-#from settings import settings_menu
 
 pygame.init()
 pygame.mixer.init()
@@ -175,12 +174,19 @@ def main_menu():
                     theme_id = (theme_id + 1) % len(theme_options)  # Next theme option
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[4].checkForInput(MENU_MOUSE_POS):  # Settings button
-                    #settings_menu()
+                    from settings import settings_menu
+                    settings_menu()
                     button_sound.play()
                     pygame.quit()
                     sys.exit()
 
         pygame.display.update()
+
+def set_options(size, index, opp):
+    global grid_size, polygon_index, opponent
+    grid_size = size
+    polygon_index = index
+    opponent = opp
 
 def main():
     main_menu()

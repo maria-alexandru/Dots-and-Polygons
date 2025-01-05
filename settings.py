@@ -1,9 +1,6 @@
 import pygame
 import sys
 from button import Button
-import game_manager
-from menu import main_menu
-from menu import music_volume
 
 pygame.init()
 pygame.mixer.init()
@@ -22,13 +19,6 @@ polygon_options = ["Square", "Triangle", "Mix"]
 polygon_index = 0
 grid_size = 7
 opponent = "Player"
-#music_volume = 0
-
-
-# Load and play background music
-pygame.mixer.music.load("assets/Two Gong Fire - Ryan McCaffrey_Go By Ocean.mp3")
-pygame.mixer.music.set_volume(music_volume / 100)
-pygame.mixer.music.play(-1)
 
 button_sound = pygame.mixer.Sound('assets/click-234708.mp3')
 
@@ -109,11 +99,8 @@ def create_buttons(screen_width, screen_height):
 
 def settings_menu():
     global SCREEN, polygon_index, grid_size, opponent, music_volume, theme_id
+
     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
-    gameManager = game_manager.GameManager()
-    gameManager.__setattr__("grid_size", grid_size)
-    gameManager.__setattr__("selected_mode", polygon_options[polygon_index])
-    gameManager.__setattr__("opponent", opponent)
 
     while True:
         SCREEN.blit(pygame.transform.scale(BG, (SCREEN.get_width(), SCREEN.get_height())), (0, 0))
@@ -153,17 +140,14 @@ def settings_menu():
                 if buttons[2].checkForInput(MENU_MOUSE_POS):  # Opponent button
                     button_sound.play()
                     opponent = "Computer" if opponent == "Player" else "Player"
-                    gameManager.__setattr__("opponent", opponent)
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[3].checkForInput(MENU_MOUSE_POS):  # Back to Menu button
+                    from menu import set_options
+                    set_options(grid_size, polygon_index, opponent)
+                    from menu import main_menu
                     main_menu()
         pygame.display.update()
 
 def run_settings():
     settings_menu()
 
-def main():
-    settings_menu()
-
-if __name__ == "__main__":
-    main()
