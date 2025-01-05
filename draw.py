@@ -43,7 +43,8 @@ selected_points = []
 
 
 def set_colors(colors, theme_id):
-    global player_colors_fill, player_colors_lines, background_color
+    global player_colors_fill, player_colors_lines, background_color, line_color
+
     player_colors_fill[0] = colors[f"player{theme_id}1"]["fill"]
     player_colors_fill[1] = colors[f"player{theme_id}2"]["fill"]
 
@@ -51,6 +52,7 @@ def set_colors(colors, theme_id):
     player_colors_lines[1] = colors[f"player{theme_id}2"]["line"]
 
     background_color = colors[f"background{theme_id}"]
+    line_color = colors[f"neutral_line{theme_id}"]
 
 
 # update variables based on screen resolution

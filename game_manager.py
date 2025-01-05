@@ -18,7 +18,7 @@ class GameManager:
     def run(self):
         colors = color.Colors()
         theme_id = 0
-        
+
         draw.set_colors(colors.get_colors(), theme_id)
 
         if self.opponent == "Computer":
