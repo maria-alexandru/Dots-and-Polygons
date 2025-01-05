@@ -80,7 +80,7 @@ class GameManager:
             pygame.display.update()
 
             if is_board_full(cells, self.selected_mode):
-                print("Board is full! Game Over.")
+                # print("Board is full! Game Over.")
                 draw.display_current_player()
                 pygame.display.update()
                 time.sleep(0.6)

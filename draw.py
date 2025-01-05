@@ -107,16 +107,24 @@ def display_current_player():
     score_text = f"Player 1: {player1_score}  |  Player 2: {player2_score}"
 
     font_size = find_best_font_size(score_text, padding_width) 
-    font = pygame.font.SysFont("Arial", font_size)
+    font = pygame.font.SysFont("lato", font_size, bold = True)
     text_width, text_height = font.size(text)
     text_height += font.size(score_text)[1]
     pygame.draw.rect(win, background_color, (20, 20, padding_width, screen_height / 2))
     
-    player_label = font.render(text, 1, player_colors_fill[current_player])
-    score_label = font.render(score_text, 1, (0, 0, 255))
+    color = player_colors_fill[current_player]
+    (r, g, b) = color
+    dark = 50
+    color = (r - dark, g - dark, b - dark)
+    player_label = font.render(text, 1, color)
+
+    color = line_color
+    (r, g, b) = color
+    color = (r - dark, g - dark, b - dark)
+    score_label = font.render(score_text, 1, color)
 
     win.blit(player_label, (20, 20))
-    win.blit(score_label, (20, 25 + font.size(text)[1]))
+    win.blit(score_label, (20, 20 + 1.5 * font.size(text)[1]))
 
     pygame.display.update()
 
@@ -127,7 +135,7 @@ def find_best_font_size(text, max_width):
     best_font_size = font_size
     
     while True:
-        font = pygame.font.SysFont("Arial", font_size)
+        font = pygame.font.SysFont("lato", font_size, bold = True)
         text_width, text_height = font.size(text)
         if text_width <= max_width:
             best_font_size = font_size

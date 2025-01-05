@@ -116,7 +116,7 @@ def is_board_full(cells, mode):
     for i, cell in enumerate(cells):
         if mode == "Square":
             if not cell.is_square_complete():
-                print(f"Cell {i} incomplete for squares: {cell.sides[:4]}")
+                # print(f"Cell {i} incomplete for squares: {cell.sides[:4]}")
                 all_complete = False
 
         elif mode == "Triangle":
@@ -127,6 +127,6 @@ def is_board_full(cells, mode):
             if not cell.is_square_complete():
                 if not cell.both_triangles_complete():
                     all_complete = False
-    if all_complete:
-        print("Board is full.")
+    # if all_complete:
+    #     print("Board is full.")
     return all_complete
