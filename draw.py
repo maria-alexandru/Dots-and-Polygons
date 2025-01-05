@@ -32,7 +32,8 @@ player2_score = 0
 
 # initialize variables based on grid size
 def init(size, mode):
-    global grid_size, padding_height, padding_width, screen, rows, cols, cell_size, selected_mode
+    global grid_size, padding_height, padding_width, screen, rows, cols, cell_size,\
+           selected_mode, current_player, player1_score, player2_score, selected_points
     grid_size = size
     selected_mode = mode
 
@@ -42,7 +43,11 @@ def init(size, mode):
     padding_width = (screen_width - (grid_size + 1) * cell_size) / 2
     padding_height = (screen_height - (grid_size + 1) * cell_size) / 2
 
-selected_points = []
+    current_player = 0
+    player1_score = 0
+    player2_score = 0
+
+    selected_points = []
 
 
 def set_colors(colors, theme_id):

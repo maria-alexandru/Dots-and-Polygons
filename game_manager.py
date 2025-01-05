@@ -2,8 +2,10 @@ import draw
 import cell_class
 import pygame
 from robot_player_class import RobotOpponent
+from cell_class import is_board_full
 import time
 import color
+from final import final_menu
 
 class GameManager:
     _instance = None
@@ -76,5 +78,15 @@ class GameManager:
                 draw.click_sound.play()
 
             pygame.display.update()
+
+            if is_board_full(cells, self.selected_mode):
+                print("Board is full! Game Over.")
+                draw.display_current_player()
+                pygame.display.update()
+                time.sleep(0.6)
+                running = False
+                final_menu()
+                break
+
 
         pygame.quit()
