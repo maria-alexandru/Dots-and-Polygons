@@ -182,8 +182,10 @@ def set_triangle_color_draw(cell, triangle_points):
         cell.color_tr1 = player_colors[current_player]
         cell.color_tr1_points = triangle_points
         if current_player == 0:
+            draw_sound.play()
             player1_score += 1
         else:
+            draw_sound.play()
             player2_score += 1
 
     elif cell.color_tr2 == (0, 0, 0) and cell.color_tr1_points != triangle_points:
@@ -193,8 +195,10 @@ def set_triangle_color_draw(cell, triangle_points):
         cell.color_tr2_points = triangle_points
 
         if current_player == 0:
+            draw_sound.play()
             player1_score += 1
         else:
+            draw_sound.play()
             player2_score += 1
 
     draw_triangle(cell, triangle_points)

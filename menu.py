@@ -150,11 +150,9 @@ def main_menu():
         # Event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                button_sound.play()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:
-                button_sound.play()
                 SCREEN = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                 buttons = create_buttons(event.w, event.h)
             if event.type == pygame.MOUSEBUTTONDOWN:
