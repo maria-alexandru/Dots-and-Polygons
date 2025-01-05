@@ -51,7 +51,7 @@ class GameManager:
                     for cell in cells:
                         collide, index = draw.collide_circle(cell, pos)
                         if pos and collide:
-                            draw.draw_circle(cell.points[index][0], cell.points[index][1], (130, 109, 168))
+                            draw.draw_circle(cell.points[index][0], cell.points[index][1], draw.selected_dot_color)
                             cell.dots[index] = True
 
                             # if a dot was selected, add it to the selected_points

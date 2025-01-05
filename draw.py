@@ -18,6 +18,7 @@ DOT_RADIUS = 8
 DOT_COLOR = (0, 0, 0)
 background_color = (240, 240, 240)
 line_color = (130, 208, 209)
+selected_dot_color = (130, 109, 168)
 
 # define colors for players
 # green for player 1, red for player 2
@@ -45,7 +46,7 @@ selected_points = []
 
 
 def set_colors(colors, theme_id):
-    global player_colors_fill, player_colors_lines, background_color, line_color
+    global player_colors_fill, player_colors_lines, background_color, line_color, selected_dot_color
     player_colors_fill[0] = colors[f"player{theme_id}1"]["fill"]
     player_colors_fill[1] = colors[f"player{theme_id}2"]["fill"]
 
@@ -54,6 +55,7 @@ def set_colors(colors, theme_id):
 
     background_color = colors[f"background{theme_id}"]
     line_color = colors[f"neutral_line{theme_id}"]
+    selected_dot_color = colors[f"dot{theme_id}"]
 
 
 # update variables based on screen resolution
@@ -155,7 +157,7 @@ def draw_grid(cells):
 
         for index, dot in enumerate(cell.dots):
             if dot == True:
-                draw_circle(cell.points[index][0], cell.points[index][1], (130, 109, 168))
+                draw_circle(cell.points[index][0], cell.points[index][1], selected_dot_color)
 
     pygame.display.update()
 
@@ -167,10 +169,10 @@ def draw_square(cell):
     draw_line(cell.rect.bottomright, cell.rect.bottomleft, line_color)
     draw_line(cell.rect.bottomleft, cell.rect.topleft, line_color)
     
-    pygame.draw.circle(win, (130, 109, 168), cell.rect.topright, DOT_RADIUS + 4)
-    pygame.draw.circle(win, (130, 109, 168), cell.rect.topleft, DOT_RADIUS + 4)
-    pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomleft, DOT_RADIUS + 4)
-    pygame.draw.circle(win, (130, 109, 168), cell.rect.bottomright, DOT_RADIUS + 4)
+    pygame.draw.circle(win, selected_dot_color, cell.rect.topright, DOT_RADIUS + 4)
+    pygame.draw.circle(win, selected_dot_color, cell.rect.topleft, DOT_RADIUS + 4)
+    pygame.draw.circle(win, selected_dot_color, cell.rect.bottomleft, DOT_RADIUS + 4)
+    pygame.draw.circle(win, selected_dot_color, cell.rect.bottomright, DOT_RADIUS + 4)
 
 
 def draw_triangle(cell, triangle_points):
@@ -185,9 +187,9 @@ def draw_triangle(cell, triangle_points):
     draw_line(triangle_points[1], triangle_points[2], line_color)
     draw_line(triangle_points[2], triangle_points[0], line_color)
     
-    pygame.draw.circle(win, (130, 109, 168), triangle_points[0], DOT_RADIUS + 4)
-    pygame.draw.circle(win, (130, 109, 168), triangle_points[1], DOT_RADIUS + 4)
-    pygame.draw.circle(win, (130, 109, 168), triangle_points[2], DOT_RADIUS + 4)
+    pygame.draw.circle(win, selected_dot_color, triangle_points[0], DOT_RADIUS + 4)
+    pygame.draw.circle(win, selected_dot_color, triangle_points[1], DOT_RADIUS + 4)
+    pygame.draw.circle(win, selected_dot_color, triangle_points[2], DOT_RADIUS + 4)
 
 
 def set_triangle_color_draw(cell, triangle_points):
@@ -282,8 +284,8 @@ def is_point_inside_cell(point, cell):
 # draw line between dots
 def draw_line(start, end, color):
     pygame.draw.line(win, color, start, end, LINE_WIDTH)
-    pygame.draw.circle(win, (130, 109, 168), start, DOT_RADIUS + 4)
-    pygame.draw.circle(win, (130, 109, 168), end, DOT_RADIUS + 4)
+    pygame.draw.circle(win, selected_dot_color, start, DOT_RADIUS + 4)
+    pygame.draw.circle(win, selected_dot_color, end, DOT_RADIUS + 4)
 
 
 # check if two points are adjacent
@@ -398,7 +400,7 @@ def remove_not_selected_dots(cells):
             selected_points.remove(s_point)
 
     if last_point:
-        pygame.draw.circle(win, (130, 109, 168), last_point, DOT_RADIUS + 4)               
+        pygame.draw.circle(win, selected_dot_color, last_point, DOT_RADIUS + 4)               
                     
 
 def dot_not_in_line(cells, point):
