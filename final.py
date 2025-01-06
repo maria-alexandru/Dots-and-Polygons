@@ -4,10 +4,11 @@ from button import Button
 from menu import main_menu
 
 pygame.init()
+button_sound = pygame.mixer.Sound('assets/click-234708.mp3')
 
 # Screen settings
 SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
-SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+SCREEN = pygame.display.get_surface()
 pygame.display.set_caption("Dots and Polygons")
 
 # Background and fonts
@@ -116,16 +117,14 @@ def final_menu(player1_score, player2_score):
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:
-                SCREEN = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                 buttons = create_buttons(event.w, event.h)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buttons[0].checkForInput(MENU_MOUSE_POS):  # Quit button
+                    button_sound.play()
                     pygame.quit()
                     sys.exit()
                 if buttons[1].checkForInput(MENU_MOUSE_POS):  # Back to Menu button
+                    button_sound.play()
                     main_menu()
                             
         pygame.display.update()
-
-def run_final():
-    final_menu(player1_score, player2_score)

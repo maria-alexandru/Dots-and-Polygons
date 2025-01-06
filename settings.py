@@ -7,7 +7,7 @@ pygame.mixer.init()
 
 # Screen settings
 SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
-SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+SCREEN = pygame.display.get_surface()
 pygame.display.set_caption("Dots and Polygons")
 
 # Background and fonts
@@ -17,7 +17,7 @@ BASE_FONT_SIZE = 20
 # Default settings
 polygon_options = ["Square", "Triangle", "Mix"]
 polygon_index = 0
-grid_size = 7
+grid_size = 5
 opponent = "Player"
 
 button_sound = pygame.mixer.Sound('assets/click-234708.mp3')
@@ -26,21 +26,18 @@ def get_font(size): # Returns Press-Start-2P in the desired size
     return pygame.font.Font("assets/font.ttf", size)
 
 def draw_text(surface, text, pos, font, color="White"):
-    """Helper function to draw text on the screen."""
     render = font.render(text, True, color)
     rect = render.get_rect(center=pos)
     surface.blit(render, rect)
 
-
+# resize an image according to a scale factor
 def scale_image(image, scale_factor):
-    """Redimensioneaza o imagine in functie de un factor de scalare."""
     width = int(image.get_width() * scale_factor)
     height = int(image.get_height() * scale_factor)
     return pygame.transform.scale(image, (width, height))
 
 
 def create_buttons(screen_width, screen_height):
-    """Creeaza si returneaza butoanele pentru meniul principal."""
     scale_factor = min(screen_width / 1280, screen_height / 720)
     font_size = int(BASE_FONT_SIZE * scale_factor)
     font = get_font(font_size)
@@ -126,7 +123,6 @@ def settings_menu():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:
-                SCREEN = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                 buttons = create_buttons(event.w, event.h)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buttons[0].checkForInput(MENU_MOUSE_POS):  # Polygon button
@@ -135,13 +131,14 @@ def settings_menu():
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[1].checkForInput(MENU_MOUSE_POS):  # Grid button
                     button_sound.play()
-                    grid_size = grid_size + 1 if grid_size < 10 else 7  # Increment grid size or reset
+                    grid_size = grid_size + 1 if grid_size < 10 else 5  # Increment grid size or reset
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[2].checkForInput(MENU_MOUSE_POS):  # Opponent button
                     button_sound.play()
                     opponent = "Computer" if opponent == "Player" else "Player"
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[3].checkForInput(MENU_MOUSE_POS):  # Back to Menu button
+                    button_sound.play()
                     from menu import set_options
                     set_options(grid_size, polygon_index, opponent)
                     from menu import main_menu

@@ -114,9 +114,8 @@ def display_current_player():
     text_width, text_height = font.size(text)
     text_height += font.size(score_text1)[1]
     pygame.draw.rect(win, background_color, (20, 20, padding_width, screen_height / 2))
-    pygame.draw.rect(win, background_color, (20, 20, screen_width - 400, font.size(text)[1]))
+    pygame.draw.rect(win, background_color, (20, 20, screen_width / 2, font.size(text)[1]))
 
-    
     color = player_colors_fill[current_player]
     (r, g, b) = color
     dark = 50
@@ -131,7 +130,7 @@ def display_current_player():
 
     win.blit(player_label, (20, 20))
     win.blit(score_label1, (20, 20 + 1.5 * font.size(text)[1]))
-    win.blit(score_label2, (20, 50 + 1.5 * font.size(text)[1]))
+    win.blit(score_label2, (20, 20 + 3 * font.size(text)[1]))
 
     pygame.display.update()
 

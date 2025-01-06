@@ -18,7 +18,7 @@ BASE_FONT_SIZE = 20
 # Default settings
 polygon_options = ["Square", "Triangle", "Mix"]
 polygon_index = 0
-grid_size = 7
+grid_size = 5
 opponent = "Player"
 music_volume = 20
 theme_options = ["1", "2", "3"]
@@ -152,15 +152,11 @@ def main_menu():
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[1].checkForInput(MENU_MOUSE_POS):  # Play button
                     button_sound.play()
-                    print("Starting Game with Settings:")
-                    print(f"Polygon: {polygon_options[polygon_index]}, Grid: {grid_size}, Opponent: {opponent}")
-                    print(f"Music Volume: {music_volume}%")
                     gameManager.__setattr__("grid_size", grid_size)
                     gameManager.__setattr__("selected_mode", polygon_options[polygon_index])
                     gameManager.__setattr__("opponent", opponent)
                     gameManager.__setattr__("theme_id", theme_id)
                     gameManager.run()
-                    # return
                 if buttons[2].checkForInput(MENU_MOUSE_POS):  # Quit button
                     button_sound.play()
                     pygame.quit()
@@ -170,9 +166,9 @@ def main_menu():
                     theme_id = (theme_id + 1) % len(theme_options)  # Next theme option
                     buttons = create_buttons(SCREEN.get_width(), SCREEN.get_height())
                 if buttons[4].checkForInput(MENU_MOUSE_POS):  # Settings button
+                    button_sound.play()
                     from settings import settings_menu
                     settings_menu()
-                    button_sound.play()
                     pygame.quit()
                     sys.exit()
 

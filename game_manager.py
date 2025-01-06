@@ -7,6 +7,9 @@ import time
 import color
 from final import final_menu
 from menu import main_menu
+
+button_sound = pygame.mixer.Sound('assets/click-234708.mp3')
+
 class GameManager:
     _instance = None
 
@@ -20,6 +23,7 @@ class GameManager:
     def run(self):
         colors = color.Colors()
         
+
         draw.set_colors(colors.get_colors(), self.theme_id)
 
         if self.opponent == "Computer":
@@ -52,6 +56,7 @@ class GameManager:
                     menu_button = draw.create_button(event.w, event.h)
                 elif event.type == pygame.MOUSEBUTTONDOWN and not(draw.current_player == 1 and self.opponent == "Computer"):
                     if menu_button.checkForInput(MENU_MOUSE_POS):
+                        button_sound.play()
                         main_menu()
                     pos = event.pos
                     # check if a dot was selected
@@ -85,13 +90,11 @@ class GameManager:
             pygame.display.update()
 
             if is_board_full(cells, self.selected_mode):
-                # print("Board is full! Game Over.")
                 draw.display_current_player()
                 pygame.display.update()
                 time.sleep(0.6)
                 running = False
                 final_menu(draw.player1_score, draw.player2_score)
                 break
-
 
         pygame.quit()
