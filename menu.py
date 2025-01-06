@@ -8,7 +8,7 @@ pygame.mixer.init()
 
 # Screen settings
 SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
-SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+SCREEN = pygame.display.get_surface()
 pygame.display.set_caption("Dots and Polygons")
 
 # Background and fonts
