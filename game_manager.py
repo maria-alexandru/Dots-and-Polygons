@@ -6,6 +6,9 @@ from cell_class import is_board_full
 import time
 import color
 from final import final_menu
+from menu import main_menu
+
+button_sound = pygame.mixer.Sound('assets/click-234708.mp3')
 
 class GameManager:
     _instance = None
@@ -19,9 +22,9 @@ class GameManager:
 
     def run(self):
         colors = color.Colors()
-        theme_id = 2
         
-        draw.set_colors(colors.get_colors(), theme_id)
+
+        draw.set_colors(colors.get_colors(), self.theme_id)
 
         if self.opponent == "Computer":
             robot = RobotOpponent()
@@ -42,12 +45,19 @@ class GameManager:
  
         while running:
             draw.display_current_player()
+            menu_button = draw.create_button(draw.screen_width, draw.screen_height)
+            MENU_MOUSE_POS = pygame.mouse.get_pos()
+            menu_button.update(draw.win)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.VIDEORESIZE:
                     draw.draw_grid(cells)
+                    menu_button = draw.create_button(event.w, event.h)
                 elif event.type == pygame.MOUSEBUTTONDOWN and not(draw.current_player == 1 and self.opponent == "Computer"):
+                    if menu_button.checkForInput(MENU_MOUSE_POS):
+                        button_sound.play()
+                        main_menu()
                     pos = event.pos
                     # check if a dot was selected
                     for cell in cells:
@@ -80,13 +90,11 @@ class GameManager:
             pygame.display.update()
 
             if is_board_full(cells, self.selected_mode):
-                # print("Board is full! Game Over.")
                 draw.display_current_player()
                 pygame.display.update()
                 time.sleep(0.6)
                 running = False
-                final_menu()
+                final_menu(draw.player1_score, draw.player2_score)
                 break
-
 
         pygame.quit()

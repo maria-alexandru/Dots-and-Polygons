@@ -2,6 +2,7 @@ import ctypes
 import pygame
 import game_manager
 import math
+from button import Button
 
 pygame.init()
 pygame.mixer.init()
@@ -11,7 +12,7 @@ draw_sound = pygame.mixer.Sound('assets/sound-effect-twinklesparkle-115095.mp3')
 # Screen settings
 screen_width, screen_height = 1280, 720
 win = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
-pygame.display.set_caption("Dots and Polygons Menu")
+pygame.display.set_caption("Dots and Polygons")
 
 LINE_WIDTH = 8
 DOT_RADIUS = 8
@@ -97,21 +98,24 @@ def update_points():
 # change player after each move
 def switch_player():
     global current_player
-    current_player = (current_player + 1) % len(player_colors_fill)  # Schimba între 0 si 1
+    current_player = (current_player + 1) % len(player_colors_fill)  # Schimba intre 0 si 1
 
 # function that displays current player and score
 def display_current_player():
     global current_player, player1_score, player2_score
 
     text = f"Current Player: Player {current_player + 1}"
-    score_text = f"Player 1: {player1_score}  |  Player 2: {player2_score}"
+    score_text1 = f"Player 1: {player1_score}"
+    score_text2 = f"Player 2: {player2_score}"
 
-    font_size = find_best_font_size(score_text, padding_width) 
-    font = pygame.font.SysFont("lato", font_size, bold = True)
+    scale_factor = min(screen_width / 1280, screen_height / 720)
+    font_size = int(20 * scale_factor)
+    font = get_font(font_size)
     text_width, text_height = font.size(text)
-    text_height += font.size(score_text)[1]
+    text_height += font.size(score_text1)[1]
     pygame.draw.rect(win, background_color, (20, 20, padding_width, screen_height / 2))
-    
+    pygame.draw.rect(win, background_color, (20, 20, screen_width / 2, font.size(text)[1]))
+
     color = player_colors_fill[current_player]
     (r, g, b) = color
     dark = 50
@@ -121,32 +125,44 @@ def display_current_player():
     color = line_color
     (r, g, b) = color
     color = (r - dark, g - dark, b - dark)
-    score_label = font.render(score_text, 1, color)
+    score_label1 = font.render(score_text1, 1, color)
+    score_label2 = font.render(score_text2, 1, color)
 
     win.blit(player_label, (20, 20))
-    win.blit(score_label, (20, 20 + 1.5 * font.size(text)[1]))
+    win.blit(score_label1, (20, 20 + 1.5 * font.size(text)[1]))
+    win.blit(score_label2, (20, 20 + 3 * font.size(text)[1]))
 
     pygame.display.update()
 
-def find_best_font_size(text, max_width):
-    font_size = 1
-    best_font_size = font_size
-    
-    while True:
-        font = pygame.font.SysFont("Arial", font_size)
-        text_width, text_height = font.size(text)
-        #print(str(font_size) + " " + str(text_width) + " " + str(max_width) + " " + str(text))
-        if text_width <= max_width:
-            best_font_size = font_size
-        else:
-            break
-        
-        font_size += 1
 
-    if best_font_size > 30:
-        best_font_size = 30
-    return best_font_size
-    
+def get_font(size):
+    return pygame.font.Font("assets/font.ttf", size)
+
+# resize an image according to a scale factor
+def scale_image(image, scale_factor):
+    width = int(image.get_width() * scale_factor)
+    height = int(image.get_height() * scale_factor)
+    return pygame.transform.scale(image, (width, height))
+
+def create_button(screen_width, screen_height):
+    scale_factor = min(screen_width / 1280, screen_height / 720)
+    font_size = int(20 * scale_factor)
+    font = get_font(font_size)
+
+    original_image = pygame.image.load("assets/Play Rect.png")
+    resized_image = pygame.transform.scale(original_image, (300, 75))
+    button_image = scale_image(resized_image, scale_factor)
+
+    menu_button = Button(
+        image=button_image,
+        pos=(screen_width - button_image.get_width() // 2 - int(20 * scale_factor), button_image.get_height() // 2 + int(20 * scale_factor)),
+        text_input=f"BACK TO MENU",
+        font=font,
+        base_color="White",
+        hovering_color="White",
+    )
+    return menu_button
+
 
 # find font size for text to fit in max_width
 def find_best_font_size(text, max_width):
