@@ -134,6 +134,7 @@ def display_current_player():
 
     pygame.display.update()
 
+
 def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 
@@ -161,6 +162,7 @@ def create_button(screen_width, screen_height):
         hovering_color="White",
     )
     return menu_button
+
 
 # find font size for text to fit in max_width
 def find_best_font_size(text, max_width):
