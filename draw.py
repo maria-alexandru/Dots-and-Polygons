@@ -113,7 +113,8 @@ def display_current_player():
     font = get_font(font_size)
     text_width, text_height = font.size(text)
     text_height += font.size(score_text1)[1]
-    pygame.draw.rect(win, background_color, (20, 20, padding_width, screen_height / 2))
+    text_width = max(font.size(score_text1)[0], font.size(score_text2)[0])
+    pygame.draw.rect(win, background_color, (20, 20, text_width, screen_height / 2))
     pygame.draw.rect(win, background_color, (20, 20, screen_width / 2, font.size(text)[1]))
 
     color = player_colors_fill[current_player]
