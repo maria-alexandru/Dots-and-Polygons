@@ -103,3 +103,5 @@ ensuring that everything stayed aligned
 
 ![image](https://github.com/user-attachments/assets/bd09f88a-73b6-49d0-91cb-e9939e7e38ce)
 
+# Video
+[![Watch the video](https://img.youtube.com/vi/7haBu5yZSPM/0.jpg)](https://youtu.be/7haBu5yZSPM)
