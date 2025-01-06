@@ -12,11 +12,11 @@ class Colors:
         self.dot0 = (130, 109, 168)
 
         #theme 2
-        self.player12_line = (95, 186, 186)
-        self.player12_fill = (160, 232, 232)
+        self.player11_line = (95, 186, 186)
+        self.player11_fill = (160, 232, 232)
 
-        self.player22_line = (67, 110, 93)
-        self.player22_fill = (131, 168, 155)
+        self.player12_line = (67, 110, 93)
+        self.player12_fill = (131, 168, 155)
 
         self.background1 = (249, 232, 250)
         self.neutral_line1 = (143, 101, 112)
@@ -45,16 +45,16 @@ class Colors:
                 "fill": self.player2_fill
             },
             "player11": {
-                "line": self.player12_line,
-                "fill": self.player12_fill
+                "line": self.player11_line,
+                "fill": self.player11_fill
             },
             "player12": {
-                "line": self.player22_line,
-                "fill": self.player22_fill
-            },
-            "player21": {
                 "line": self.player12_line,
                 "fill": self.player12_fill
+            },
+            "player21": {
+                "line": self.player21_line,
+                "fill": self.player21_fill
             },
             "player22": {
                 "line": self.player22_line,
