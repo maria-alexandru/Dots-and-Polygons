@@ -14,11 +14,10 @@ pygame.display.set_caption("Dots and Polygons")
 BG = pygame.image.load("assets/fundal.jpg")
 BASE_FONT_SIZE = 20
 
-def get_font(size): # Returns Press-Start-2P in the desired size
+def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 
 def draw_text(surface, text, pos, font, color="White"):
-    """Helper function to draw text on the screen."""
     render = font.render(text, True, color)
     rect = render.get_rect(center=pos)
     surface.blit(render, rect)
@@ -53,8 +52,7 @@ def create_buttons(screen_width, screen_height):
         base_color="White",
         hovering_color="#eae3ff",
     )
-    
-    
+
     menu_button = Button(
         image=menu_image,
         pos=(screen_width // 2, title_button_spacing + int(280 * scale_factor)),

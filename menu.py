@@ -31,25 +31,22 @@ pygame.mixer.music.play(-1)
 
 button_sound = pygame.mixer.Sound('assets/click-234708.mp3')
 
-def get_font(size): # Returns Press-Start-2P in the desired size
+def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 
 def draw_text(surface, text, pos, font, color="White"):
-    """Helper function to draw text on the screen."""
     render = font.render(text, True, color)
     rect = render.get_rect(center=pos)
     surface.blit(render, rect)
 
-
+# resize an image according to a scale factor
 def scale_image(image, scale_factor):
-    """Redimensioneaza o imagine in functie de un factor de scalare."""
     width = int(image.get_width() * scale_factor)
     height = int(image.get_height() * scale_factor)
     return pygame.transform.scale(image, (width, height))
 
 
 def create_buttons(screen_width, screen_height):
-    """Creeaza si returneaza butoanele pentru meniul principal."""
     scale_factor = min(screen_width / 1280, screen_height / 720)
     font_size = int(BASE_FONT_SIZE * scale_factor)
     font = get_font(font_size)
@@ -64,7 +61,7 @@ def create_buttons(screen_width, screen_height):
     polygon_image = scale_image(resized_image2, scale_factor)
 
     title_button_spacing = int(screen_height * 0.25)
-    button_spacing_horizontal = int(30 * scale_factor)  # Distanta intre butoanele Play si Quit
+    button_spacing_horizontal = int(30 * scale_factor)
 
     play_button = Button(
         image=play_image,
@@ -96,7 +93,7 @@ def create_buttons(screen_width, screen_height):
 
     music_button = Button(
         image=music_image,
-        pos=(screen_width // 2, title_button_spacing + int(215 * scale_factor)),
+        pos=(screen_width // 2, title_button_spacing + int(310 * scale_factor)),
         text_input=f"Music Volume: {music_volume}%",
         font=font,
         base_color="White",
@@ -104,8 +101,8 @@ def create_buttons(screen_width, screen_height):
     )
     theme_button = Button(
         image=polygon_image,
-        pos=(screen_width // 2, title_button_spacing + int(310 * scale_factor)),
-        text_input=f"Theme: {theme_options[theme_id]}",
+        pos=(screen_width // 2, title_button_spacing + int(215 * scale_factor)),
+        text_input=f"Color Theme: {theme_options[theme_id]}",
         font=font,
         base_color="White",
         hovering_color="#d7fcd4",
@@ -146,7 +143,6 @@ def main_menu():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:
-                SCREEN = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                 buttons = create_buttons(event.w, event.h)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buttons[0].checkForInput(MENU_MOUSE_POS):  # Music button
